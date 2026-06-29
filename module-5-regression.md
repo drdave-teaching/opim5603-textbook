@@ -1,302 +1,287 @@
-# Module 5 — Regression
-
-Relationships between variables: correlation, simple and multiple linear regression, and generalized linear models (logistic, Poisson). We close with categorical data analysis using the chi-square distribution.
+# Chapter 5 — Regression
 
 :::{admonition} 🔗 Notebooks for this chapter
 :class: seealso dropdown
 Open in Colab and **Runtime → Run all** (R notebooks).
 
 - **Correlation and Simple Linear Regression** &nbsp; [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/drdave-teaching/OPIM5603-notebooks/blob/main/Module5/Correlation_and_Simple_Linear_Regression.ipynb) &nbsp; [GitHub](https://github.com/drdave-teaching/OPIM5603-notebooks/blob/main/Module5/Correlation_and_Simple_Linear_Regression.ipynb)
-- **Recipe LogisticRegression** &nbsp; [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/drdave-teaching/OPIM5603-notebooks/blob/main/Module5/Recipe_LogisticRegression.ipynb) &nbsp; [GitHub](https://github.com/drdave-teaching/OPIM5603-notebooks/blob/main/Module5/Recipe_LogisticRegression.ipynb)
-- **Recipe MultipleLinearRegression** &nbsp; [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/drdave-teaching/OPIM5603-notebooks/blob/main/Module5/Recipe_MultipleLinearRegression.ipynb) &nbsp; [GitHub](https://github.com/drdave-teaching/OPIM5603-notebooks/blob/main/Module5/Recipe_MultipleLinearRegression.ipynb)
-- **Recipe PoissonRegression** &nbsp; [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/drdave-teaching/OPIM5603-notebooks/blob/main/Module5/Recipe_PoissonRegression.ipynb) &nbsp; [GitHub](https://github.com/drdave-teaching/OPIM5603-notebooks/blob/main/Module5/Recipe_PoissonRegression.ipynb)
-- **Recipe SimpleLinearRegression** &nbsp; [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/drdave-teaching/OPIM5603-notebooks/blob/main/Module5/Recipe_SimpleLinearRegression.ipynb) &nbsp; [GitHub](https://github.com/drdave-teaching/OPIM5603-notebooks/blob/main/Module5/Recipe_SimpleLinearRegression.ipynb)
-- **Recipe Stepwise LogisticRegression** &nbsp; [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/drdave-teaching/OPIM5603-notebooks/blob/main/Module5/Recipe_Stepwise_LogisticRegression.ipynb) &nbsp; [GitHub](https://github.com/drdave-teaching/OPIM5603-notebooks/blob/main/Module5/Recipe_Stepwise_LogisticRegression.ipynb)
-- **Categorical Data Analysis Nominal Data** &nbsp; [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/drdave-teaching/OPIM5603-notebooks/blob/main/Module6/Categorical_Data_Analysis_Nominal_Data.ipynb) &nbsp; [GitHub](https://github.com/drdave-teaching/OPIM5603-notebooks/blob/main/Module6/Categorical_Data_Analysis_Nominal_Data.ipynb)
+- **Recipe: Simple Linear Regression** &nbsp; [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/drdave-teaching/OPIM5603-notebooks/blob/main/Module5/Recipe_SimpleLinearRegression.ipynb) &nbsp; [GitHub](https://github.com/drdave-teaching/OPIM5603-notebooks/blob/main/Module5/Recipe_SimpleLinearRegression.ipynb)
+- **Recipe: Multiple Linear Regression** &nbsp; [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/drdave-teaching/OPIM5603-notebooks/blob/main/Module5/Recipe_MultipleLinearRegression.ipynb) &nbsp; [GitHub](https://github.com/drdave-teaching/OPIM5603-notebooks/blob/main/Module5/Recipe_MultipleLinearRegression.ipynb)
+- **Recipe: Logistic Regression** &nbsp; [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/drdave-teaching/OPIM5603-notebooks/blob/main/Module5/Recipe_LogisticRegression.ipynb) &nbsp; [GitHub](https://github.com/drdave-teaching/OPIM5603-notebooks/blob/main/Module5/Recipe_LogisticRegression.ipynb)
+- **Recipe: Stepwise Logistic Regression** &nbsp; [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/drdave-teaching/OPIM5603-notebooks/blob/main/Module5/Recipe_Stepwise_LogisticRegression.ipynb) &nbsp; [GitHub](https://github.com/drdave-teaching/OPIM5603-notebooks/blob/main/Module5/Recipe_Stepwise_LogisticRegression.ipynb)
+- **Recipe: Poisson Regression** &nbsp; [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/drdave-teaching/OPIM5603-notebooks/blob/main/Module5/Recipe_PoissonRegression.ipynb) &nbsp; [GitHub](https://github.com/drdave-teaching/OPIM5603-notebooks/blob/main/Module5/Recipe_PoissonRegression.ipynb)
+- **Categorical Data Analysis (Nominal)** &nbsp; [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/drdave-teaching/OPIM5603-notebooks/blob/main/Module6/Categorical_Data_Analysis_Nominal_Data.ipynb) &nbsp; [GitHub](https://github.com/drdave-teaching/OPIM5603-notebooks/blob/main/Module6/Categorical_Data_Analysis_Nominal_Data.ipynb)
 :::
 
-## 5.1 Correlation and Simple Linear Regression
 
-### Video: Correlation Analysis
+This capstone ties the whole course together. We move from **correlation** to **simple** and **multiple linear regression**, extend to **generalized linear models** (logistic and Poisson), and finish with **categorical data analysis** (chi-square). Throughout, the theme is **inference**: not just predicting, but understanding and defending what drives the outcome.
 
-**Overview.** Let's go back to some of our earlier EDA and quantitatively calculate whether or not there is a linear relationship (positive or negative) between X and Y. We calculate the correlation coefficient (r ) and then test whether or not the correlation is significantly different than zero (which requires us to run a t-test). The most important thing to take away here is the calculation of the test statistic, t, and the calculation of the p-value (remember, we need to multiply by 2… this is because we could've calculated the correlation between X and Y as well as Y and X… this relates to the symmetry of a two-tailed test!)
+## 5.1 Correlation and simple linear regression
 
-*✍️ Full narrative coming from the lecture transcript.*
+The **correlation coefficient** `r` (−1 to +1) measures the *strength of a linear relationship*; `cor.test()` even tests whether it's significantly different from zero (a t-test with `df = n − 2`). But beware: correlation is not causation.
 
-### Video: Regression Analysis
+```{admonition} Correlation ≠ causation
+:class: warning
+Strong correlations can be **spurious** — donkey populations and PhDs granted, peanut and aspirin consumption. A significant `r` says two variables *move together*, never that one *causes* the other.
+```
 
-**Overview.** We will discuss how we relate correlation to regression - in fact, simple linear regression is a function of r (which means r is used in the regression equation). 'r' is going to be used in the slope (b), the intercept (a) is a function of the slope. Study these equations and start to see the relationship between everything.
+**Least squares** fits the line that minimizes squared error: slope `b = r · (s_y / s_x)`, intercept `a = ȳ − b·x̄`. (For a linear model with normal errors, least squares and MLE give the **same** answer.) Then we test the slope: `t = b / SE_b`, where `SE_b`'s numerator is the **standard error of the estimate** `S_yx`. A neat result — in simple regression the **slope test and the correlation test produce the identical t and p-value**, and `R² = r²`.
 
-*✍️ Full narrative coming from the lecture transcript.*
+```r
+m <- lm(sales ~ calls, data = df)
+summary(m)                 # slope, SE, t, p, R²
+predict(m, newdata, interval = "confidence")   # mean response
+predict(m, newdata, interval = "prediction")   # a single new case (wider)
+```
 
-### Video: Testing the Significance of the Slope
+A **confidence interval** estimates the *mean* response for given X; a **prediction interval** covers a *single new* observation and is always wider (the formula differs by a `+1`). If the target is skewed, a **log transform** can dramatically improve fit (the golf-winnings example jumps from R² 0.61 to 0.93).
 
-**Overview.** We learn some new terminology and learn how to define and calculate the 'standard error of the slope' (sb) - which is a function of your actual (Y) vs predicted (Y-hat) results. We calculate sb and then calculate the test statistic, t = b/sb, and then run a two-tailed test with the t distribution (with df = n-2, due to symmetry). We reject the null hypothesis that the population slope is actually 0. Be careful - we do a slightly different example than the narrative in the book here - but our numbers match the printout in the book!!!
+## 5.2 Multiple linear regression
 
-*✍️ Full narrative coming from the lecture transcript.*
+More predictors, same machinery. Use the clean `y ~ .` syntax ("everything else predicts y"), read **R²**, and prune **insignificant predictors one at a time** (drop the highest p-value, refit, repeat). Watch the sign convention: a **residual = actual − predicted**, so an *under*-estimate is *positive*.
 
-### Video: R2
+Two preprocessing best practices: **transform the target** toward normality (check with the Anderson-Darling test in `goftest`; pick a power with **Tukey's ladder** / `car::powerTransform`), and optionally **standardize X** (z-score or, Dave's preference, min-max so every column lives on 0–1).
 
-**Overview.** There is a big love triangle going on here - you have three quantities - sb, syx, and R2. syx is the numerator of sb. SSE is the numerator of the syx. R2 is a function of SSE. Hence, the R2, syx and sb are all a function of how well the model is fitting the data. Only the R2 and sb are presented in the summary(model) code… and hence, the precision/uncertainty (sb) of your estimated coefficient (b) is a function of how well the model fits the data (R2). WOOT! So, if the points on the scatterplot are close to the regression line, you will probably have a small standard error of the slope (sb), a big R2 and a small p-value.
+```{admonition} Multicollinearity wrecks inference — check VIF
+:class: warning
+**Correlated predictors** add no information, destabilize coefficients (even flipping signs), and can make you delete the wrong variable. Compute the **variance inflation factor** `VIF_j = 1/(1 − R²_j)`; drop any predictor with **VIF > 5**, highest first, then refit. (In *prediction*-only data-science work you may not care — but a stats class cares about **inference**.)
+```
 
-*✍️ Full narrative coming from the lecture transcript.*
+Once predictors are uncorrelated, replace manual p-pruning with **stepwise selection** (`stepAIC`, forward or backward) — it adds/removes terms to minimize **AIC** (= −2·log-likelihood + 2k), favoring **parsimony**. Evaluate with **MAE / RMSE / MAPE**, an **actual-vs-predicted** plot (the 45° line), and confidence/prediction intervals. The full **soup-to-nuts recipe**: read → explore → full model → VIF prune → stepwise → error metrics → actual-vs-predicted → inference.
 
-### Video: Confidence Intervals vs. Prediction Intervals
+## 5.3 Generalized linear models
 
-**Overview.** A confidence interval is used to answer the question ' how many sales could the average person make if they make 25 calls? (n=Inf)'. A prediction interval answers the question 'how many sales could this person standing right next to me make if she made 25 phone calls? (n=1)'. Of course, we are going to be MORE UNCERTAIN when we are talking about a single person, so our prediction interval is going to be larger than our confidence interval. We also demonstrate how to calculate a confidence interval by hand, and show that it's way easier to just use R to do these calculations. Graphing is a little bit involved but the plot looks nice.
+When the target isn't continuous-normal, keep the linear core and **transform** (a GLM).
 
-*✍️ Full narrative coming from the lecture transcript.*
+**Logistic regression** (binary target). Most of the work is **data cleaning**: coerce mistyped columns to numeric, drop NAs/ID columns, **balance the classes** (downsample the majority), and recode the target to 0/1. Fit with `glm(..., family = binomial)`, then **exponentiate coefficients** to read them as **odds** (a coefficient giving `e^β = 1.80` is a ~80% increase in the odds). Evaluate with the **confusion matrix** → accuracy, precision, recall, AUC. Prune insignificant predictors iteratively (Dave's affectionate "p-hacking") or let **`stepAIC`** do it.
 
-### Video: Transforming Data
+**Poisson regression** (count target). Fit with `family = poisson`, modeling `log λ` as linear and **exponentiating** coefficients for a *multiplicative* effect. Encode categoricals as **k−1 dummies** (`fastDummies`); an `NA` coefficient flags a **linear combination** (e.g., total meds = prescribed + non-prescribed). Watch **over-dispersion** (variance ≫ mean) — if the deviance/df ratio is well above 1, the standard errors are wrong and you'd reach for **quasi-Poisson** (at the cost of losing AIC/log-likelihood).
 
-**Overview.** We show the value of transforming your target variable (via a log transform) such that we force it to be more normally distributed, which results in a better fitting model.
+```{admonition} Stats vs. data science
+:class: note
+Two mindsets share these tools. **Inference** (this course): keep models clean — check VIF, prune to significant predictors, interpret coefficients. **Prediction** (black-box ML): throw everything in, standardize, and optimize accuracy while ignoring the coefficients. Same `glm`, different goals.
+```
 
-*✍️ Full narrative coming from the lecture transcript.*
+## 5.4 Special topics — categorical data analysis (chi-square)
 
-### Video: Following a Recipe - Simple Linear Regression
+Not every relationship needs a regression. For **nominal** (unordered) categories, the **chi-square** distribution lets us compare **observed vs. expected frequencies**. It's never negative, right-skewed, and parameterized by **degrees of freedom** based on the number of *categories*, not the sample size. The statistic is always
 
-**Overview.** A clean real-world example of how to perform a simple linear regression.
+$$\chi^2 = \sum \frac{(O - E)^2}{E}$$
 
-*✍️ Full narrative coming from the lecture transcript.*
+Three tests:
 
-## 5.2 Multiple Linear Regression
-
-### Video: Getting Started with Boston Housing and Multiple Linear Regression
-
-**Overview.** Comparison of simple vs. multiple linear regression; introduction to the Boston Housing dataset; exploratory data analysis and summary statistics. A quick peek at the distribution of the target variable and motivation for whether to change it or not.
-
-*✍️ Full narrative coming from the lecture transcript.*
-
-### Video: Distribution of Target Variable and Transformations
-
-**Overview.** A key assumption of linear models is that your target variable/dependent variable/Y variable follows a normal distribution. Visual inspection is typically accepted here, but we can be quantitative instead of qualitative. We can use the Anderson-Darling test from the goftest package to test whether or not our target variable is normally distributed. We discuss Tukey's ladder of transformations to understand the transformations available to use to coerce our 'medv' column to follow a normal distribution. We use the 'car' package and the powertransform() function to let R tell us what we should do to our target variable so that it follows a normal distribution.
-
-*✍️ Full narrative coming from the lecture transcript.*
-
-### Video: Standardization Techniques
-
-**Overview.** A quick comparison of z-score vs. min/max scaling. Z-score tells you how many observations away from the mean your data point is, vs. min/max tells you which percentile of the distribution the data point is.
-
-*✍️ Full narrative coming from the lecture transcript.*
-
-### Video: Model Fitting, Interpretation and Iterative Variable Selection
-
-**Overview.** Let's build our first multiple linear regression and then delete variables one at a time based on p-values. This is a first generation approach to modeling, which is valid but a lot of manual work to do the updating. After we delete insignificant variables, we look at the actual vs. predicted scatterplot, the distribution of residuals (to ensure the univariate distribution of residuals is essentially normally distributed), and a scatterplot of actual (X) vs. residuals to make sure that errors are randomly distributed.
-
-*✍️ Full narrative coming from the lecture transcript.*
-
-### Video: Error Metrics and Intervals (for model parameters and predictions)
-
-**Overview.** Everything we learned about error metrics (MAE, RMSE, MAPE) and intervals (confidence vs. prediction intervals) applies here. We conclude with the common steps for fitting a multiple linear regression.
-
-*✍️ Full narrative coming from the lecture transcript.*
-
-### Video: Stepwise Variable Selection and AIC for Model Comparison
-
-**Overview.** An overview of the problems with correlated predictors and how we can be more efficient by evaluating variance inflation factors (VIF) instead of correlation values. Then we will run a stepwise regression such that we choose a combination of X variables that improves (lowers) our AIC.
-
-*✍️ Full narrative coming from the lecture transcript.*
-
-### Video: Recipe: Multiple Linear Regression
-
-**Overview.** A soup-to-nuts, concise example of how to perform a multiple linear regression with VIF and stepwise.
-
-*✍️ Full narrative coming from the lecture transcript.*
-
-## 5.3 Generalized Linear Models
-
-### Video: Introduction to logistic regression and data clean-up (Pt. 1)
-
-**Overview.** We will read in the Wisconsin Breast Cancer data from an online repository and clean it up for modeling (delete the ID column, address any missing or erroneous data and recode the target variable from 2 and 4 to 0 and 1).
-
-*✍️ Full narrative coming from the lecture transcript.*
-
-### Video: Fitting the (full) logistic regression and interpreting its output (Pt. 2)
-
-*✍️ Full narrative coming from the lecture transcript.*
-
-### Video: Calculate error metrics, remove insignificant predictors, and then reinterpret logistic regression (Pt. 3)
-
-**Overview.** Common error metrics for a regression problem include accuracy Insignificant predictors in the model can cause unwanted noise - it is best to remove them if they are not contributing anything. Start with the highest p-value and delete one at a time. We then use AIC for model comparison (lower is always better) and choose the reduced model - which had SLIGHTLY worst accuracy with half the predictors ( but if we get essentially the same accuracy with less predictors, that's a good thing!)
-
-*✍️ Full narrative coming from the lecture transcript.*
-
-### Video: Fitting a stepwise logistic regression model
-
-**Overview.** Stepwise takes all the hard work out of fitting a model - just let it rip! You will probably get a 'very good' fitting model with (mostly) significant predictors. If you have anything insignificant at the end, delete one at a time.
-
-*✍️ Full narrative coming from the lecture transcript.*
-
-### Video: Fitting a Poisson model (Pt. 1 - fastDummies)
-
-**Overview.** Poisson regression is for when your target variable takes on values between 0 and +Inf and takes on integer values (count data). Whenever you have a variable with multiple categories (say, 'color' = ('red', 'green', 'blue')... you will want to recode this as three new dummy variables for red (0/1), green (0/1) or blue (0/1). Due to collinearity, you will only need k-1 categories as a dummy variable (if it's not red and if it's not green then it has to be blue!) In this video, we will process the data for modeling.
-
-*✍️ Full narrative coming from the lecture transcript.*
-
-### Video: Fitting a Poisson model (Pt. 2 - Evaluation of Model Output)
-
-**Overview.** In this video, we run the stepwise regression, interpret the model output and evaluate the quality of the predictions with error metrics and visualizations.
-
-*✍️ Full narrative coming from the lecture transcript.*
-
-## 5.4 Special Topics
-
-### Video: Introduction to Categorical Data Analysis
-
-**Overview.** In this notebook, we will cover three different flavors of categorical data analysis: 1) Chi-square Goodness-of-Fit Test: Equal Expected Frequencies; 2) Goodness-of-fit test: Unequal Expected Frequencies; 3) Chi-square Test for independence.Introduction to the chi-squared distribution and its properties.
-
-*✍️ Full narrative coming from the lecture transcript.*
-
-### Video: Goodness of Fit with Equal Frequencies
-
-**Overview.** We look at an example of a restaurant with 4 food categories - you are sampling people as they come out of the restaurant and ask them what they ate: fish, meat, chicken or pasta. Your job is to determine if there is a difference between the 4 categories or if they are all the same. You need to run a hypothesis test with the chi squared distribution which is parameterized by the number of categories (k) minus 1 degrees of freedom.  Solved by hand and then with one line of R code.
-
-*✍️ Full narrative coming from the lecture transcript.*
-
-### Video: Goodness of Fit with Unequal Frequencies
-
-**Overview.** Not everything has equal frequencies! Is this example we show how we can compare distributions at the national and local level to determine if a policy is effective. We also discuss some pitfalls of chi-square and some rules of thumb to follow to ensure you don't erroneously reject the null hypothesis (remember - if expected frequency is smaller than 5, you need to combine groups or not run the test!)
-
-*✍️ Full narrative coming from the lecture transcript.*
-
-### Video: Chi-square Test for Independence
-
-**Overview.** Is there a relationship between smoking and drinking? How about income and education? In this video, we show you how to test whether or not there is a difference between to types of categorical variables. We conclude with a brief discussion on 'Welden's Dice' - the poor guy rolled dice 26000 times for the purpose of creating an old school number generator - and it turns out, his dice were biased!!! So he unnecessarily rolled 26k dice.
-
-*✍️ Full narrative coming from the lecture transcript.*
+- **Goodness of fit, equal frequencies** — do restaurant entrée choices differ from uniform? `df = categories − 1`.
+- **Goodness of fit, unequal frequencies** — local vs. national hospitalization rates; expected = proportion × total. **Rule:** every expected cell ≥ 5, or combine categories (small expected cells falsely inflate χ²).
+- **Test of independence** — are two categorical variables related (smoking & drinking; hometown & behavior)? `E = row total × column total / grand total`, `df = (rows − 1)(cols − 1)` (Weldon's 26,000 dice rolls turn out biased).
 
 ## Wrap-up
 
 ```{admonition} Key takeaways
 :class: tip
-- **Correlation → regression**: r drives the slope; test the slope with a t-test.
-- Model fit ties together **R², s(y·x), and the standard error of the slope**.
-- **Multiple LR**: check normality of the target, scale, prune by p-value, then **VIF + stepwise/AIC**.
-- **GLMs**: logistic (binary) and Poisson (counts); **chi-square** for categorical data.
+- **Correlation** `r` measures linear strength (≠ causation); test it, and remember in SLR the **slope test = correlation test** and **R² = r²**.
+- **Least squares** = MLE under normal errors; **CI** (mean response) vs **PI** (single case, wider); **transform** skewed targets.
+- **MLR**: prune insignificant terms; **residual = actual − predicted**; kill multicollinearity with **VIF > 5**, then **stepAIC** for parsimony; report **MAE/RMSE/MAPE** + actual-vs-predicted.
+- **Logistic GLM**: clean + balance data, `family = binomial`, **exponentiate to odds**, judge with the **confusion matrix**.
+- **Poisson GLM**: `family = poisson`, `log λ` linear, **exponentiate** for multiplicative effects; dummy-encode categoricals; watch **over-dispersion**.
+- **Chi-square** for nominal data: `χ² = Σ(O−E)²/E`; goodness-of-fit (equal/unequal) and **independence**; mind df and the expected-≥5 rule.
 ```
+
 
 ---
 
 ## 📌 Lecture key points
 
-*Quick reference — one card per lecture (click to expand).*
+*Distilled takeaways from the video lectures behind this chapter — click each to expand.*
+
 
 :::{admonition} Correlation Analysis
 :class: note dropdown
-Let's go back to some of our earlier EDA and quantitatively calculate whether or not there is a linear relationship (positive or negative) between X and Y. We calculate the correlation coefficient (r ) and then test whether or not the correlation is significantly different than zero (which requires us to run a t-test). The most important thing to take away here is the calculation of the test statistic, t, and the calculation of the p-value (remember, we need to multiply by 2… this is because we could've calculated the correlation between X and Y as well as Y and X… this relates to the symmetry of a two-tailed test!)
+- `r` ∈ [−1, 1] measures the **strength of a linear** relationship.
+- Compute by hand or with `cor()`; test it with `cor.test()` (t, `df = n − 2`).
+- **Correlation ≠ causation** — beware spurious correlations.
+- A 0.76 is a moderately strong positive trend.
 :::
 
 :::{admonition} Regression Analysis
 :class: note dropdown
-We will discuss how we relate correlation to regression - in fact, simple linear regression is a function of r (which means r is used in the regression equation). 'r' is going to be used in the slope (b), the intercept (a) is a function of the slope. Study these equations and start to see the relationship between everything.
+- **Least squares** fits the line minimizing squared error.
+- Slope `b = r · s_y/s_x`; intercept `a = ȳ − b·x̄`.
+- Same estimates as **MLE** when errors are normal.
+- The line passes through (x̄, ȳ); predictions fall on it.
 :::
 
 :::{admonition} Testing the Significance of the Slope
 :class: note dropdown
-We learn some new terminology and learn how to define and calculate the 'standard error of the slope' (sb) - which is a function of your actual (Y) vs predicted (Y-hat) results. We calculate sb and then calculate the test statistic, t = b/sb, and then run a two-tailed test with the t distribution (with df = n-2, due to symmetry). We reject the null hypothesis that the population slope is actually 0. Be careful - we do a slightly different example than the narrative in the book here - but our numbers match the printout in the book!!!
+- `t = b / SE_b`; `SE_b` has the **standard error of estimate** `S_yx` as numerator.
+- Two-tailed test, `df = n − 2`.
+- In SLR this gives the **same t and p as the correlation test**.
+- `lm()` + `summary()` reports it directly.
 :::
 
 :::{admonition} R2
 :class: note dropdown
-There is a big love triangle going on here - you have three quantities - sb, syx, and R2. syx is the numerator of sb. SSE is the numerator of the syx. R2 is a function of SSE. Hence, the R2, syx and sb are all a function of how well the model is fitting the data. Only the R2 and sb are presented in the summary(model) code… and hence, the precision/uncertainty (sb) of your estimated coefficient (b) is a function of how well the model fits the data (R2). WOOT! So, if the points on the scatterplot are close to the regression line, you will probably have a small standard error of the slope (sb), a big R2 and a small p-value.
+- **Coefficient of determination** `R² = 1 − SSE/SST` (variance explained).
+- In simple regression, `R² = r²`.
+- `S_yx` (std error of estimate) drives both `SE_b` and the intervals.
+- Better fit ⇒ smaller `S_yx`, bigger `R²`.
 :::
 
 :::{admonition} Confidence Intervals vs. Prediction Intervals
 :class: note dropdown
-A confidence interval is used to answer the question ' how many sales could the average person make if they make 25 calls? (n=Inf)'. A prediction interval answers the question 'how many sales could this person standing right next to me make if she made 25 phone calls? (n=1)'. Of course, we are going to be MORE UNCERTAIN when we are talking about a single person, so our prediction interval is going to be larger than our confidence interval. We also demonstrate how to calculate a confidence interval by hand, and show that it's way easier to just use R to do these calculations. Graphing is a little bit involved but the plot looks nice.
+- **CI** = the *mean* response for given X; **PI** = a *single new* case.
+- Formulas differ only by a `+1` ⇒ the **PI is always wider**.
+- Both shrink when the model fits well (small `S_yx`).
+- `predict(m, interval = "confidence" / "prediction")`.
 :::
 
 :::{admonition} Transforming Data
 :class: note dropdown
-We show the value of transforming your target variable (via a log transform) such that we force it to be more normally distributed, which results in a better fitting model.
+- A skewed target hurts fit; a **log transform** can fix it.
+- Golf winnings: R² jumps **0.61 → 0.93** after `log`.
+- Transforming changes interpretation (you're modeling `log y`).
+- Also clean dirty fields (strip commas, coerce to numeric).
 :::
 
-:::{admonition} Following a Recipe - Simple Linear Regression
+:::{admonition} Following a Recipe — Simple Linear Regression
 :class: note dropdown
-A clean real-world example of how to perform a simple linear regression.
+- Workflow: read → clean → explore → `lm` → error metrics → actual-vs-predicted.
+- Fit `log(winnings) ~ score`; interpret slope and R² (0.94).
+- **MAE / MAPE / RMSE** for performance; bias for over/under.
+- Plot the 45° actual-vs-predicted line (+ CI/PI for SLR).
 :::
 
-:::{admonition} Getting Started with Boston Housing and Multiple Linear Regression
+:::{admonition} Getting Started with Boston Housing and MLR
 :class: note dropdown
-Comparison of simple vs. multiple linear regression; introduction to the Boston Housing dataset; exploratory data analysis and summary statistics. A quick peek at the distribution of the target variable and motivation for whether to change it or not.
+- Predict `medv` (dependent) from many **independent** variables.
+- Convert the `chas` 0/1 indicator to a **factor**; `str`/`summary` recon.
+- Check the **target's distribution** before modeling.
+- Independence of predictors matters — correlation check comes later.
 :::
 
 :::{admonition} Distribution of Target Variable and Transformations
 :class: note dropdown
-A key assumption of linear models is that your target variable/dependent variable/Y variable follows a normal distribution. Visual inspection is typically accepted here, but we can be quantitative instead of qualitative. We can use the Anderson-Darling test from the goftest package to test whether or not our target variable is normally distributed. We discuss Tukey's ladder of transformations to understand the transformations available to use to coerce our 'medv' column to follow a normal distribution. We use the 'car' package and the powertransform() function to let R tell us what we should do to our target variable so that it follows a normal distribution.
+- A normal target ⇒ normal errors (a key assumption).
+- **Anderson-Darling** (`goftest`) tests normality quantitatively.
+- **Tukey's ladder** / `car::powerTransform` picks the power (e.g., cube root).
+- Transform improves fit but complicates coefficient interpretation.
 :::
 
 :::{admonition} Standardization Techniques
 :class: note dropdown
-A quick comparison of z-score vs. min/max scaling. Z-score tells you how many observations away from the mean your data point is, vs. min/max tells you which percentile of the distribution the data point is.
+- **z-score** = (x − mean)/sd; **min-max** = (x − min)/range (0–1).
+- Puts predictors on a level playing field (optional in stats).
+- Dave prefers **min-max** (coefficients read as per-1% change).
+- Helpful for stability/prediction; less so for inference.
 :::
 
 :::{admonition} Model Fitting, Interpretation and Iterative Variable Selection
 :class: note dropdown
-Let's build our first multiple linear regression and then delete variables one at a time based on p-values. This is a first generation approach to modeling, which is valid but a lot of manual work to do the updating. After we delete insignificant variables, we look at the actual vs. predicted scatterplot, the distribution of residuals (to ensure the univariate distribution of residuals is essentially normally distributed), and a scatterplot of actual (X) vs. residuals to make sure that errors are randomly distributed.
+- `y ~ .` hack models against all other columns (clean data only).
+- Read **R²**; prune the **highest p-value** predictor, refit, repeat.
+- **Residual = actual − predicted** (under-estimates are positive).
+- Check residuals are ~normal and centered on zero.
 :::
 
 :::{admonition} Error Metrics and Intervals
 :class: note dropdown
-Everything we learned about error metrics (MAE, RMSE, MAPE) and intervals (confidence vs. prediction intervals) applies here. We conclude with the common steps for fitting a multiple linear regression.
+- **MAE** (avg absolute error), **MAPE** (percent), **RMSE** (penalizes outliers).
+- Residual vs error sign convention (residual = actual − predicted).
+- Confidence intervals on **coefficients** (≈ estimate ± 2·SE).
+- CI vs PI for predictions; the recipe summary for MLR.
 :::
 
 :::{admonition} Stepwise Variable Selection and AIC for Model Comparison
 :class: note dropdown
-An overview of the problems with correlated predictors and how we can be more efficient by evaluating variance inflation factors (VIF) instead of correlation values. Then we will run a stepwise regression such that we choose a combination of X variables that improves (lowers) our AIC.
+- **Correlated predictors** destabilize inference → compute **VIF**, drop > 5.
+- `VIF_j = 1/(1 − R²_j)` — how predictable a predictor is from the rest.
+- **stepAIC** (forward/backward) prunes to minimize **AIC** (parsimony).
+- Game plan: full model → VIF → stepwise → evaluate.
 :::
 
 :::{admonition} Recipe: Multiple Linear Regression
 :class: note dropdown
-A soup-to-nuts, concise example of how to perform a multiple linear regression with VIF and stepwise.
+- Soup-to-nuts: read → full model → VIF prune → stepAIC → metrics → inference.
+- Drop `tax` (highest VIF), then stepwise removes weak terms.
+- Compare AICs; favor the simpler model (parsimony).
+- Interpret signs (rooms ↑ price, NOx ↓ price); note underestimated high-value homes.
 :::
 
-:::{admonition} Introduction to logistic regression and data clean-up
+:::{admonition} Introduction to logistic regression and data clean-up (Pt. 1)
 :class: note dropdown
-We will read in the Wisconsin Breast Cancer data from an online repository and clean it up for modeling (delete the ID column, address any missing or erroneous data and recode the target variable from 2 and 4 to 0 and 1).
+- Logistic = a **GLM** for a 0/1 target.
+- Clean: coerce the `?`-laden numeric column, drop NAs and the **ID** column.
+- **Balance classes** by downsampling the majority (set a seed).
+- Recode the target (2/4 → 0/1) before fitting.
 :::
 
-:::{admonition} Fitting the
+:::{admonition} Fitting the (full) logistic regression and interpreting its output (Pt. 2)
 :class: note dropdown
-Key points will be distilled from the lecture transcript.
+- `glm(class ~ ., family = binomial)`; **stars** mark significance.
+- Predictions are probabilities → **round at 0.5** to 0/1.
+- **Exponentiate coefficients** to read **odds** (e.g., 1.80 = +80% odds).
+- Positive coef ↑ odds; ignore the intercept's meaning.
 :::
 
-:::{admonition} Calculate error metrics, remove insignificant predictors, and then reinterpret logistic regression
+:::{admonition} Calculate error metrics, remove insignificant predictors, reinterpret (Pt. 3)
 :class: note dropdown
-Common error metrics for a regression problem include accuracy Insignificant predictors in the model can cause unwanted noise - it is best to remove them if they are not contributing anything. Start with the highest p-value and delete one at a time. We then use AIC for model comparison (lower is always better) and choose the reduced model - which had SLIGHTLY worst accuracy with half the predictors ( but if we get essentially the same accuracy with less predictors, that's a good thing!)
+- **Confusion matrix** → accuracy, precision, recall (+ AUC).
+- Precision = TP/(TP+FP); recall = TP/(TP+FN).
+- Iteratively drop the highest-p predictor, refit ("p-hacking" lovingly).
+- Compare full vs reduced by **AIC** (lower wins; nearly equal fit).
 :::
 
 :::{admonition} Fitting a stepwise logistic regression model
 :class: note dropdown
-Stepwise takes all the hard work out of fitting a model - just let it rip! You will probably get a 'very good' fitting model with (mostly) significant predictors. If you have anything insignificant at the end, delete one at a time.
+- `MASS::stepAIC` automates backward elimination for a GLM.
+- Correlated/weak predictors drop out as AIC falls.
+- Reduced model ≈ full model accuracy with ~half the predictors.
+- Optionally remove a last borderline term for all-significant predictors.
 :::
 
-:::{admonition} Fitting a Poisson model
+:::{admonition} Fitting a Poisson model (Pt. 1 — fastDummies)
 :class: note dropdown
-Poisson regression is for when your target variable takes on values between 0 and +Inf and takes on integer values (count data). Whenever you have a variable with multiple categories (say, 'color' = ('red', 'green', 'blue')... you will want to recode this as three new dummy variables for red (0/1), green (0/1) or blue (0/1). Due to collinearity, you will only need k-1 categories as a dummy variable (if it's not red and if it's not green then it has to be blue!) In this video, we will process the data for modeling.
+- Poisson = count target (0 → ∞, integers); mean = variance = λ.
+- Encode categoricals as **k − 1 dummies** with `fastDummies` (avoid collinearity).
+- Drop the original factor columns after dummying.
+- Reference category is the one left out.
 :::
 
-:::{admonition} Fitting a Poisson model
+:::{admonition} Fitting a Poisson model (Pt. 2 — Evaluation)
 :class: note dropdown
-In this video, we run the stepwise regression, interpret the model output and evaluate the quality of the predictions with error metrics and visualizations.
+- `glm(..., family = poisson)`, model `log λ`; **exponentiate** for multiplicative effects.
+- **`NA` coefficient** = a linear combination (medicine = prescribed + non-prescribed) — drop one.
+- Evaluate with MAE/RMSE/MAPE, actual-vs-predicted; `stepAIC` to prune.
+- Watch **over-dispersion** (deviance/df ≫ 1) → consider **quasi-Poisson**.
 :::
 
 :::{admonition} Introduction to Categorical Data Analysis
 :class: note dropdown
-In this notebook, we will cover three different flavors of categorical data analysis: 1) Chi-square Goodness-of-Fit Test: Equal Expected Frequencies; 2) Goodness-of-fit test: Unequal Expected Frequencies; 3) Chi-square Test for independence.Introduction to the chi-squared distribution and its properties.
+- For **nominal** (unordered) categories vs **ordinal** (ranked).
+- The **chi-square** distribution: never negative, right-skewed, df by **categories**.
+- Visualize with `table()`, `prop.table()`, and bar plots.
+- Sets up goodness-of-fit and independence tests.
 :::
 
 :::{admonition} Goodness of Fit with Equal Frequencies
 :class: note dropdown
-We look at an example of a restaurant with 4 food categories - you are sampling people as they come out of the restaurant and ask them what they ate: fish, meat, chicken or pasta. Your job is to determine if there is a difference between the 4 categories or if they are all the same. You need to run a hypothesis test with the chi squared distribution which is parameterized by the number of categories (k) minus 1 degrees of freedom.  Solved by hand and then with one line of R code.
+- Compare observed counts to a **uniform** expectation (restaurant entrées).
+- `χ² = Σ (O − E)²/E`; right-tailed test, `df = categories − 1`.
+- Big O−E gaps ⇒ reject "all equal."
+- Verify with base R `chisq.test()`.
 :::
 
 :::{admonition} Goodness of Fit with Unequal Frequencies
 :class: note dropdown
-Not everything has equal frequencies! Is this example we show how we can compare distributions at the national and local level to determine if a policy is effective. We also discuss some pitfalls of chi-square and some rules of thumb to follow to ensure you don't erroneously reject the null hypothesis (remember - if expected frequency is smaller than 5, you need to combine groups or not run the test!)
+- Expected counts from given proportions × total (local vs national).
+- Same `χ² = Σ(O−E)²/E`, `df = categories − 1`.
+- **Rule:** each expected cell ≥ 5, or **combine** categories.
+- Small expected cells falsely inflate χ² and over-reject.
 :::
 
 :::{admonition} Chi-square Test for Independence
 :class: note dropdown
-Is there a relationship between smoking and drinking? How about income and education? In this video, we show you how to test whether or not there is a difference between to types of categorical variables. We conclude with a brief discussion on 'Welden's Dice' - the poor guy rolled dice 26000 times for the purpose of creating an old school number generator - and it turns out, his dice were biased!!! So he unnecessarily rolled 26k dice.
+- Tests whether **two categorical variables** are related (smoking & drinking).
+- Expected `E = (row total × column total) / grand total`.
+- `df = (rows − 1)(columns − 1)`; feed a table to `chisq.test()`.
+- Weldon's 26,000 dice rolls come out **biased** (distributions don't match).
 :::
