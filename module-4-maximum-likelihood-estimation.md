@@ -1,162 +1,204 @@
-# Module 4 — Maximum Likelihood Estimation
-
-Maximum likelihood for statistical estimation: given the data, what parameter values most likely generated it? We use analytical and numerical methods, and connect MLE directly to fitting regression models.
+# Chapter 4 — Maximum Likelihood Estimation
 
 :::{admonition} 🔗 Notebooks for this chapter
 :class: seealso dropdown
 Open in Colab and **Runtime → Run all** (R notebooks).
 
-- **MLE and Regression R** &nbsp; [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/drdave-teaching/OPIM5603-notebooks/blob/main/Module4/MLE_and_Regression_R.ipynb) &nbsp; [GitHub](https://github.com/drdave-teaching/OPIM5603-notebooks/blob/main/Module4/MLE_and_Regression_R.ipynb)
+- **MLE and Regression** &nbsp; [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/drdave-teaching/OPIM5603-notebooks/blob/main/Module4/MLE_and_Regression_R.ipynb) &nbsp; [GitHub](https://github.com/drdave-teaching/OPIM5603-notebooks/blob/main/Module4/MLE_and_Regression_R.ipynb)
 :::
 
-## 4.1 MLE Theory
 
-### Video 1: Intro to Statistical Estimation
+Hypothesis testing asked, "given a claim about the population, is my sample extreme?" **Maximum likelihood estimation (MLE)** flips the question: *given the data, what population most likely produced it?* This chapter builds likelihood from scratch, optimizes it three ways, and then delivers the payoff — MLE is the engine under **regression**, including the **generalized linear models** (logistic, Poisson) you'll use constantly.
 
-**Overview.** How to upload a .csv file from your computer desktop to the local runtime. Using dnorm() to calculate the likelihood of observing a datapoint from a normal distribution. Likelihood is not the same as probability, but it is closely related.
+## 4.1 Likelihood vs. probability
 
-*✍️ Full narrative coming from the lecture transcript.*
+Back with continuous distributions we avoided point estimates and `dnorm`. Now we use it on purpose: `dnorm(x, mean, sd)` is the **likelihood** of observing one data point under an assumed mean and SD. If the data clusters around 5 and you *assume* the mean is 10, the low observations become very unlikely — that mismatch is exactly what likelihood measures. Likelihood is *like* a probability (bounded 0–1) but describes the parameters given the data, not the other way around.
 
-### Video 2: How to Calculate Likelihood and Log-Likelihood
+## 4.2 The likelihood function and log-likelihood
 
-**Overview.** The difference between likelihood and log-likelihood. When multiplying a bunch of small numbers together (product (pi) operator), it gets difficult for a computer (and humas) to keep track of all of those digits. Instead, we can calculate the log-likelihood and sum them up (sum (sigma) operator). The log-likelihood will be a negative number. Careful: students often get confused with this - we want to maximize log likelihood - and maximizing the log likelihood means selecting the most positive value (even if it's a small negative number).
+Assuming observations are **independent**, the likelihood of the *whole* sample is the product of each point's `dnorm` — just like "the probability of rolling three sixes is 1/6 × 1/6 × 1/6":
 
-*✍️ Full narrative coming from the lecture transcript.*
+$$L(m) = \prod_{i=1}^{n} P(x_i \mid m)$$
 
-### Video 3: Analytical vs. Numeric Approaches for MLE
+Multiplying 56 tiny numbers underflows, so we take the **log** and *sum* instead — the **log-likelihood**. Maximizing it (the **least-negative** value) gives the **maximum likelihood estimate**.
 
-**Overview.** We just saw that the sample mean is MLE of the population mean - how do analytical methods work for the Bernoulli and Poisson distributions? Spoiler alert - the answer is pretty boring - the MLE estimate of pi (prob of success) is just count of successes/total successes; the MLE estimate of lambda for a Poisson distribution is just the mean value…
+```r
+LL_mean <- function(m) sum(dnorm(x, mean = m, sd = 2, log = TRUE))  # log-likelihood
+ms  <- seq(0, 10, by = 0.1)
+res <- sapply(ms, LL_mean)
+plot(ms, res, type = "l");  ms[which.max(res)]   # the peak ≈ the sample mean
+```
 
-*✍️ Full narrative coming from the lecture transcript.*
+The grid search peaks at the **sample mean** — a first hint that MLE recovers the estimators you already know.
 
-### Video 4: data2.csv, Zero-Inflated Poisson and the need for Numeric Approaches
+## 4.3 Three ways to optimize
 
-**Overview.** Let's explore how things can start to break down when our distribution isn't as simple as a Bernoulli and Poisson distribution. Introduction to numeric approaches and the 'bbmle' library and the mle2() function.
+Every MLE problem is: **specify the model form → write the likelihood → take the log → optimize.** Three ways to do that last step:
 
-*✍️ Full narrative coming from the lecture transcript.*
+- **Grid search** — try many parameter values and keep the best (fine for one parameter, hopeless for many).
+- **Analytical** — calculus: set the derivative of the log-likelihood to zero (a flat slope = the top of the hill). For a **Bernoulli** the MLE of π is *successes/total*; for a **Poisson** the MLE of λ is the *mean*. Tidy, but only for simple cases.
+- **Numeric** — let an optimizer search the parameter space with gradients. We use **`bbmle::mle2()`**, which *minimizes*, so we feed it the **negative** log-likelihood.
 
-### Video 5: Estimating parameters from different distributions (normal, Poisson, zero-inflated Poisson)
+## 4.4 Over-dispersion and the zero-inflated Poisson
 
-**Overview.** How to use user-written functions for log-likelihood and the 'bbmle' package to estimate the mean and standard deviation of a distribution. The importance of providing bounds and initial values to aid convergence. Note that 'bbmle' requires you return a -LL even though it gives you -2LL in the output. Why -2LL? The reason -2LL is show in the output is because this quantity is used to calculate model fit metrics (like AIC - more on this later.)
+A core Poisson assumption is **mean = variance = λ**. In `data2`, `x1` honors that, but `x2` is swamped with **zeros** (variance ≈ 2× the mean) — **over-dispersion**. A plain Poisson with λ = the mean puts too much mass in the "1" bin and misses reality. The fix is a **zero-inflated Poisson**: a **Bernoulli** part for the structural zeros times a **Poisson** part for the counts (think safe vs. reckless drivers — most file zero claims; the rest follow a Poisson). The math gets intractable by hand, which is exactly why we lean on **numeric optimization**.
 
-*✍️ Full narrative coming from the lecture transcript.*
+## 4.5 From MLE to regression — the linear model
 
-### Video 6: Confidence Intervals and Standard Errors estimates
+Here's the light-bulb. Write the linear model with its **error term**:
 
-**Overview.** How to obtain a confidence interval for the parameter estimate to better reflect the population via bootstrapping (repeated sampling). The basic idea is simple. Generate a bootstrap sample and compute the parameter estimate using maximum likelihood approach. Repeat this for a large number of bootstrap samples, each time computing the estimate value. This will create the sampling distribution of the parameter estimate values. Use the sampling distribution to generate the confidence intervals for the parameter estimate.
+$$y = \beta_0 + \beta_1 x_1 + \varepsilon, \qquad \varepsilon \sim \text{Normal}(0, \sigma)$$
 
-*✍️ Full narrative coming from the lecture transcript.*
+Rearranged, the error `y − β₀ − β₁x` is normally distributed — so we can **maximize the likelihood of the errors** and solve for β₀, β₁, and σ *simultaneously* with `mle2()`. On the corn/nitrate data, the **baseline** (predict the mean) has SST with σ = 2171; the fitted model gets σ = **1940** (smaller error). `R² = 1 − SSE/SST = 0.20` — fertilizer explains ~20% of yield. `lm()` reproduces the same coefficients, the **slope** is the marginal effect (one unit of nitrate → +51.5 yield), and each coefficient's **p-value** tests H₀: coef = 0.
 
-## 4.2 MLE and Regression
+```{admonition} bbmle in practice
+:class: tip
+Give `mle2()` sensible **starting values** (coefficients at 0, σ at the target's SD) and **bounds** (no negative σ — use the `L-BFGS-B` method). It's gradient-based, so it can land in a local optimum — try a few starts. In real work you'll just call **`lm()`/`glm()`**; the MLE machinery is what's running underneath.
+```
 
-### Video 1: Linear regression with Corn.csv (Pt. 1)
+Linear-model assumptions to honor before you trust inference: **(1)** a normally distributed target, **(2)** homoscedastic errors (no fanning in actual-vs-error), **(3)** errors uncorrelated with the predictors, **(4)** independent observations (no time dependence).
 
-**Overview.** We start to tie maximum likelihood estimation to regression - and everything is going to hinge upon our error term… our quest begins! We start our lecture by trying to relate crop yield to fertilizer amounts. Our hope is that crop yield goes up as fertilizer goes up. A linear model is a great choice here for our problem. Though not discussed yet, by using a linear model we are assuming our response (target) variable is normally distributed. We also assume that our ERROR term is normally distributed. We will exploit this error term in the next video in order to get a model that can relate fertilizer to crop yield.
+## 4.6 Generalized linear models: logistic & Poisson regression
 
-*✍️ Full narrative coming from the lecture transcript.*
+When the target isn't continuous-normal, **transform it** and keep the linear core (a GLM):
 
-### Video 2: Linear regression with Corn.csv (Pt. 2)
+- **Logistic regression** (binary target — grad-school `admit`): the **logistic transform** `π = eˣ/(1 + eˣ)` turns log-odds into a linear model. `mle2` estimates the coefficients; **stars = significant** (GRE wasn't). Interpret on the **odds** scale: a coefficient of 0.88 means `e^0.88 = 2.41×` the odds of admission per +1 GPA.
+- **Poisson regression** (count target — `days absent` in `student.csv`): model `log λ` as linear, then **exponentiate** coefficients for a *multiplicative* effect (e.g., `e^-0.6 = 0.45×` fewer absences as progress rises).
 
-**Overview.** Understanding linear regression and model fit. We learn that SSE are the sum of the squared errors from our fitted model, and we hope that this quantity is smaller than SST (the sum of the squared errors from the baseline model). Using SSE and SST, we can calculate the R2 value (it is 1 - SSE/SST). We show that our model can explain 20% of the variance that we observe.
+```{admonition} Comparing models: −2 log-likelihood → AIC/BIC
+:class: note
+`mle2` reports **−2 log-likelihood** as a fit metric (smaller is better). **AIC** and **BIC** add it to a penalty for the number of parameters (BIC also for sample size). The numbers are meaningless alone — they matter when you **compare** models: if dropping an insignificant term barely changes the fit, prefer the simpler model (**parsimony**).
+```
 
-*✍️ Full narrative coming from the lecture transcript.*
+## 4.7 Confidence intervals by bootstrap
 
-### Video 3: Closing Thoughts on Linear Regression (Pt. 3)
-
-**Overview.** Suggestions for getting 'bbmle' to converge and an overview of the four assumptions of linear models. (1) target variable must be normally distributed; (2) no 'fanning' of predictions on actual vs. predicted (we want constant variance, no heteroskedasticity). (3) power terms/interaction terms are included so there's no systemic problems with model fit. (4) no time dependence in the data (assume independence among observations).
-
-*✍️ Full narrative coming from the lecture transcript.*
-
-### Video 4: Regression with binary outcomes with Admit.csv (Pt. 1)
-
-**Overview.** We show how, even though our target variable only takes on 0/1 values, that we can apply the 'logistic transformation' which allows us to leverage the linear form of the model. When you are trying to predict a 0/1 value, you are using a 'generalized linear model' (GLM) that is known as a logistic regression.
-
-*✍️ Full narrative coming from the lecture transcript.*
-
-### Video 5: Understanding logistic regression and model fit (Pt. 2)
-
-**Overview.** A gentle introduction to the interpretation of the logistic regression coefficients and application of information criterion (AIC, BIC) for model comparison - it is all a function of -2LL!
-
-*✍️ Full narrative coming from the lecture transcript.*
-
-### Video 6: Regression for count outcomes with student.csv
-
-**Overview.** A gentle introduction to the fitting of a Poisson model (for target variables that are COUNT DATA from 0 to +Inf). Interpretation of coefficients and calculation of AIC using a built-in R function.
-
-*✍️ Full narrative coming from the lecture transcript.*
+One sample gives one MLE. To put uncertainty around it, **bootstrap**: resample the data *with replacement* many times, re-estimate the parameter each time, and read the 2.5th/97.5th percentiles. For `data1$x1`, the mean MLE is 5.73 with a 95% bootstrap CI of roughly **5.2–6.27** — the CLT idea from Chapter 2, reused.
 
 ## Wrap-up
 
 ```{admonition} Key takeaways
 :class: tip
-- **Likelihood vs. log-likelihood** — we maximize log-likelihood (sums, not products).
-- Estimate a distribution's parameters with `bbmle::mle2()` using bounds + initial values.
-- MLE underpins **linear, logistic, and Poisson regression** coefficients.
-- Linear model vs. **generalized linear model (GLM)** — and when to use each.
+- **MLE** asks which parameters make the observed data most likely; `dnorm`/`dpois` give per-point **likelihood**.
+- Likelihood is a **product** over independent points → use **log-likelihood** (a sum) and **maximize** it (least-negative).
+- Optimize by **grid search**, **analytical calculus** (Bernoulli MLE = successes/total; Poisson MLE = mean), or **numeric `bbmle::mle2`** (minimize the *negative* log-likelihood).
+- **Over-dispersion** (variance ≫ mean, excess zeros) calls for a **zero-inflated Poisson** (Bernoulli × Poisson).
+- Regression *is* MLE on a **normal error term**: `mle2` (or `lm`) solves β's and σ; check **R²**, the slope's meaning, the p-value, and the **four LM assumptions**.
+- **GLMs**: logistic (logistic transform, interpret **odds** via `e^coef`) and Poisson (`log λ` linear, interpret multiplicatively); compare models with **−2 log-likelihood → AIC/BIC** and favor parsimony.
+- Put a **bootstrap** confidence interval around any MLE.
 ```
+
 
 ---
 
 ## 📌 Lecture key points
 
-*Quick reference — one card per lecture (click to expand).*
+*Distilled takeaways from the video lectures behind this chapter — click each to expand.*
+
 
 :::{admonition} Intro to Statistical Estimation
 :class: note dropdown
-How to upload a .csv file from your computer desktop to the local runtime. Using dnorm() to calculate the likelihood of observing a datapoint from a normal distribution. Likelihood is not the same as probability, but it is closely related.
+- Estimation flips testing: *given the data, what population most likely generated it?*
+- `dnorm(x, mean, sd)` = the **likelihood** of one point under assumed parameters.
+- Assume the wrong mean (e.g., 10 for data centered at 5) and low values become very unlikely.
+- Likelihood is like a probability (0–1) but about parameters given data.
+- Visualize a point's likelihood on the assumed curve.
 :::
 
 :::{admonition} How to Calculate Likelihood and Log-Likelihood
 :class: note dropdown
-The difference between likelihood and log-likelihood. When multiplying a bunch of small numbers together (product (pi) operator), it gets difficult for a computer (and humas) to keep track of all of those digits. Instead, we can calculate the log-likelihood and sum them up (sum (sigma) operator). The log-likelihood will be a negative number. Careful: students often get confused with this - we want to maximize log likelihood - and maximizing the log likelihood means selecting the most positive value (even if it's a small negative number).
+- Independence ⇒ sample **likelihood = product** of each point's `dnorm`.
+- Tiny products underflow ⇒ take the **log** and **sum** (`log = TRUE`).
+- **Maximize** log-likelihood = pick the least-negative value.
+- Grid search over m peaks at the **sample mean**.
+- Wrap it in a function and `sapply` over candidate values, then plot.
 :::
 
 :::{admonition} Analytical vs. Numeric Approaches for MLE
 :class: note dropdown
-We just saw that the sample mean is MLE of the population mean - how do analytical methods work for the Bernoulli and Poisson distributions? Spoiler alert - the answer is pretty boring - the MLE estimate of pi (prob of success) is just count of successes/total successes; the MLE estimate of lambda for a Poisson distribution is just the mean value…
+- Steps: model form → likelihood → log-likelihood → optimize.
+- **Analytical**: set the derivative to 0 — Bernoulli MLE = successes/total; Poisson MLE = mean.
+- A zero slope is the top of the likelihood hill.
+- **Numeric**: optimizers (gradients) scale to many parameters.
+- You won't do the calculus by hand — `bbmle` handles it.
 :::
 
-:::{admonition} data2.csv, Zero-Inflated Poisson and the need for Numeric Approaches
+:::{admonition} data2.csv, Zero-Inflated Poisson & Numeric Approaches
 :class: note dropdown
-Let's explore how things can start to break down when our distribution isn't as simple as a Bernoulli and Poisson distribution. Introduction to numeric approaches and the 'bbmle' library and the mle2() function.
+- Poisson assumes **mean = variance**; excess zeros break that (over-dispersion).
+- `data2$x2`: variance ≈ 2× mean ⇒ a plain Poisson misfits.
+- **Zero-inflated Poisson** = Bernoulli (structural zeros) × Poisson (counts).
+- Safe-vs-reckless-driver intuition for the two processes.
+- Analytical math gets intractable ⇒ use numeric `mle2`.
 :::
 
 :::{admonition} Estimating parameters from different distributions
 :class: note dropdown
-How to use user-written functions for log-likelihood and the 'bbmle' package to estimate the mean and standard deviation of a distribution. The importance of providing bounds and initial values to aid convergence. Note that 'bbmle' requires you return a -LL even though it gives you -2LL in the output. Why -2LL? The reason -2LL is show in the output is because this quantity is used to calculate model fit metrics (like AIC - more on this later.)
+- `bbmle::mle2()` with a negative-log-likelihood function + starting values.
+- Estimate mean alone, or **mean and σ together** (needs bounds: no negative σ, `L-BFGS-B`).
+- Poisson λ and zero-inflated-Poisson (λ and p) likewise.
+- Summary gives estimate, standard error, z, and −2 log-likelihood.
+- Wrong model form can "wash out" (e.g., p → 0) — read the output.
 :::
 
 :::{admonition} Confidence Intervals and Standard Errors estimates
 :class: note dropdown
-How to obtain a confidence interval for the parameter estimate to better reflect the population via bootstrapping (repeated sampling). The basic idea is simple. Generate a bootstrap sample and compute the parameter estimate using maximum likelihood approach. Repeat this for a large number of bootstrap samples, each time computing the estimate value. This will create the sampling distribution of the parameter estimate values. Use the sampling distribution to generate the confidence intervals for the parameter estimate.
+- One sample → one MLE; quantify it with a **bootstrap**.
+- Resample **with replacement** to the same size, re-estimate many times.
+- The spread of estimates is the sampling distribution → a **95% CI**.
+- `data1$x1`: mean 5.73, CI ≈ 5.2–6.27.
+- Reuses the CLT/bootstrapping idea from Module 2.
 :::
 
-:::{admonition} Linear regression with Corn.csv
+:::{admonition} Linear regression with Corn.csv (Pt. 1)
 :class: note dropdown
-We start to tie maximum likelihood estimation to regression - and everything is going to hinge upon our error term… our quest begins! We start our lecture by trying to relate crop yield to fertilizer amounts. Our hope is that crop yield goes up as fertilizer goes up. A linear model is a great choice here for our problem. Though not discussed yet, by using a linear model we are assuming our response (target) variable is normally distributed. We also assume that our ERROR term is normally distributed. We will exploit this error term in the next video in order to get a model that can relate fertilizer to crop yield.
+- Goal: predict **yield** from **nitrate**; the payoff tying MLE to regression.
+- **Baseline** = predict the mean; error = **SST** (sum of squared totals).
+- The linear model `y = β₀ + β₁x + ε` hinges on the **error term** `ε ~ Normal(0, σ)`.
+- Hope: fitted σ < the baseline SD (2171).
+- Squaring errors penalizes big misses.
 :::
 
-:::{admonition} Linear regression with Corn.csv
+:::{admonition} Linear regression with Corn.csv (Pt. 2)
 :class: note dropdown
-Understanding linear regression and model fit. We learn that SSE are the sum of the squared errors from our fitted model, and we hope that this quantity is smaller than SST (the sum of the squared errors from the baseline model). Using SSE and SST, we can calculate the R2 value (it is 1 - SSE/SST). We show that our model can explain 20% of the variance that we observe.
+- `mle2` solves **β₀, β₁, σ simultaneously** by maximizing the likelihood of the errors.
+- Result: σ = 1940 < 2171, slope = 51.5 (marginal effect of nitrate).
+- `lm()` reproduces the same coefficients — a sanity check.
+- **R² = 1 − SSE/SST = 0.20**: nitrate explains ~20% of yield.
+- p-value tests H₀: coefficient = 0.
 :::
 
-:::{admonition} Closing Thoughts on Linear Regression
+:::{admonition} Closing Thoughts on Linear Regression (Pt. 3)
 :class: note dropdown
-Suggestions for getting 'bbmle' to converge and an overview of the four assumptions of linear models. (1) target variable must be normally distributed; (2) no 'fanning' of predictions on actual vs. predicted (we want constant variance, no heteroskedasticity). (3) power terms/interaction terms are included so there's no systemic problems with model fit. (4) no time dependence in the data (assume independence among observations).
+- `bbmle` tips: start coefficients at 0, σ at the target's SD; add bounds; try multiple starts (local optima).
+- In practice use **`lm`/`glm`**, not `bbmle`.
+- Four LM assumptions: normal target, **homoscedastic** errors, errors uncorrelated with X, independent obs.
+- Biggest one: make the **target roughly normal** before fitting.
+- Assumptions are what make **inference** (not just prediction) valid.
 :::
 
-:::{admonition} Regression with binary outcomes with Admit.csv
+:::{admonition} Regression with binary outcomes with Admit.csv (Pt. 1)
 :class: note dropdown
-We show how, even though our target variable only takes on 0/1 values, that we can apply the 'logistic transformation' which allows us to leverage the linear form of the model. When you are trying to predict a 0/1 value, you are using a 'generalized linear model' (GLM) that is known as a logistic regression.
+- Binary target (`admit`) ⇒ **logistic regression** (a GLM).
+- **Logistic transform** `π = eˣ/(1+eˣ)` keeps the model linear in log-odds.
+- `mle2` estimates β's; **stars** flag significance (GRE wasn't significant).
+- Baseline likelihood uses `π^(#1s)·(1−π)^(#0s)`; track **−2 log-likelihood**.
+- Higher GPA ↑ admission; higher (worse) class rank ↓ it.
 :::
 
-:::{admonition} Understanding logistic regression and model fit
+:::{admonition} Understanding logistic regression and model fit (Pt. 2)
 :class: note dropdown
-A gentle introduction to the interpretation of the logistic regression coefficients and application of information criterion (AIC, BIC) for model comparison - it is all a function of -2LL!
+- **Odds** = π/(1−π); log-odds is the linear quantity.
+- Interpret coefficients via `e^coef`: +1 GPA ⇒ **2.41×** the odds of admission.
+- Drop insignificant predictors (GRE) and refit.
+- **AIC/BIC** from −2 log-likelihood penalize extra parameters (and samples).
+- Smaller AIC/BIC + similar fit ⇒ choose the simpler model.
 :::
 
 :::{admonition} Regression for count outcomes with student.csv
 :class: note dropdown
-A gentle introduction to the fitting of a Poisson model (for target variables that are COUNT DATA from 0 to +Inf). Interpretation of coefficients and calculation of AIC using a built-in R function.
+- Count target (**days absent**) ⇒ **Poisson regression**.
+- Model `log λ` as linear, then **exponentiate** coefficients.
+- `e^-0.6 = 0.45×` fewer absences as progress rises (multiplicative).
+- All predictors significant; ignore/interpret the intercept loosely.
+- Compare with −2 log-likelihood / AIC / BIC (meaningful only vs another model).
 :::
