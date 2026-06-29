@@ -141,90 +141,143 @@ Open in Colab and **Runtime → Run all** (R notebooks).
 
 :::{admonition} Welcome to Dr. Dave
 :class: note dropdown
-Key points will be distilled from the lecture transcript.
+- Course welcome from Dr. Dave; R was his first language and stats is foundational for any analyst/data scientist.
+- Five themes for the term: descriptive statistics → probability distributions → hypothesis testing → maximum likelihood → regression.
+- Goal by the end: a real command of R, fearless EDA, and the confidence to fit a model and say something intelligent about it.
 :::
 
 :::{admonition} Setting up Google Drive and Google Colab
 :class: note dropdown
-You should use Google Chrome in this class (for a browser) and a dedicated Gmail account (personal Gmail or UConn Gmail). Make folders that match the flow of the class. Install Drive's access to Colab. Save a copy of the blank R notebook. Be careful - you need to use my blank R notebook whenever you get started (otherwise you will be running Python!)
+- Set up Google Drive + Colab: one class folder, a subfolder per week; install the Colaboratory app in Drive.
+- Always start from the **blank R notebook** — Colab defaults to Python, so check the `version` cell says R.
+- `File → Download .ipynb` to keep your own copy; notebooks mix formatted text cells with code cells.
+- Code along (run cells with Ctrl+Enter) — nobody learns to code just by watching.
 :::
 
 :::{admonition} R basics with ISwR
 :class: note dropdown
-Let's get our feet wet with some R programming. Introduction to the assignment operator(s) = and <-. How to find help if you need it.
+- Assignment uses `=` or `<-` (R descends from Bell Labs' S language).
+- Get help with `?rnorm` or Google; `rnorm(n)` draws from a normal (defaults mean 0, sd 1).
+- 'Restart and run all' executes top-to-bottom — a notebook is a linear recipe.
+- R is case-sensitive; x/y are safe variable names.
 :::
 
 :::{admonition} R basics with ISwR
 :class: note dropdown
-R is just a big calculator - create a vector and assign to vectors, then manipulate them. Don't forget to use c() when creating a vector. You can use formulas from base R, and nest them (a function in a function) just like Excel. If you are so adventurous, you can also try making some formulas in LaTeX or embedding a picture.
+- R is a big calculator: `hist()`, `mean()`, `sd()` (sample), `median()`; random draws vary slightly per run.
+- Build vectors with `c()`; arithmetic is vectorized (applies element-wise).
+- `length()`, `round()`, and nested functions (like Excel); `var()` = sample variance.
+- Text cells render LaTeX and embedded images.
 :::
 
 :::{admonition} R basics with ISwR
 :class: note dropdown
-Scatterplots, overview of data types (strings, logicals, numeric), combining strings and organizing data in vectors, lists and dataframes (most common).
+- Scatter with `plot(x, y, col=, pch=19, cex=, main=)`; use `args()` or Google for options.
+- Core data types: numeric, character (quoted strings — no math), logical (T/F).
+- Logical conditions (e.g., `bmi > 25`) return T/F vectors used for subsetting.
+- `paste()`/`cat()` join strings; mixing types coerces to string; lists vs data frames, accessed with `$`.
 :::
 
 :::{admonition} R basics with ISwR
 :class: note dropdown
-cbind() through end. Learn how to subset rows and/or columns from a dataframe and make a boxplot.
+- `cbind()` columns into a matrix, then `as.data.frame()` — prefer data frames.
+- Square brackets select: `v[5]`, `v[c(3,5,7)]`, ranges `1:5`, and drop with `-`.
+- Logical subsetting across vectors; `df[rows, cols]` (leave blank = all); `head()`/`tail()`.
+- `install.packages("ISwR")` (quoted) then `library(ISwR)` (unquoted); boxplot by group.
 :::
 
 :::{admonition} Describing Data
 :class: note dropdown
-Central Tendency - population and sample mean (making nicely labeled histograms).
+- Population vs sample — parameters are Greek letters, statistics are Roman letters.
+- Mean = sum / n (same formula for both); the mean is the data's balance point and is sensitive to outliers.
+- Median is rank-based and robust to outliers.
+- `mean()`, `length()`, and `abline(v = mean(x), col, lwd, lty=2)` to mark the mean on a histogram.
 :::
 
 :::{admonition} Describing Data
 :class: note dropdown
-Central Tendency and Dispersion - median and mode; range and mean deviation.
+- Median = 50th percentile (robust); mode = most frequent value — no base-R function, write one with `table()`/`unique()`.
+- Overlay mean/median/mode lines on a skewed histogram to compare.
+- Spread matters (the river-depth analogy): `range()` returns min & max; the range is max − min.
+- Mean deviation = average absolute deviation from the mean (absolute value keeps it from cancelling to 0).
 :::
 
 :::{admonition} Describing Data
 :class: note dropdown
-Dispersion - Variance and Standard Deviation - by hand (long-form with dataframes) and with formulas.
+- Population variance σ² = Σ(x − mean)² / n; squaring penalizes outliers; SD = √variance (original units).
+- Sample variance s² divides by n − 1 — a penalty that adds uncertainty when using a sample.
+- `var()` and `sd()` return the **sample** versions (what you use ~99% of the time).
+- Worked by hand with a data-frame column per step, then verified with the built-ins.
 :::
 
 :::{admonition} Describing Data
 :class: note dropdown
-Chebychev's Theorem applies to distributions of any shape (normal or unnormal) whereas the empirical rule applies only to NORMAL distributions. … save for Week 2?
+- Chebyshev's theorem holds for ANY shape: ≥75% within ±2 SD, ≥88% within ±3 SD.
+- Empirical rule (NORMAL data only): ~68% / 95% / 99.7% within ±1 / 2 / 3 SD.
+- Use mean ± k·SD to bound real ranges (rent/price worked examples).
+- Visualize with shaded SD bands over a simulated normal distribution.
 :::
 
 :::{admonition} Summarizing Data and Visualization
 :class: note dropdown
-Data types and subsetting by group with the Arthritis package. Remember that we can use an ampersand (&) to join to conditions together, and then subset data. Use dim() to check the number of rows and columns, str() for data types, and summary() for a quick peek at the data frame.
+- EDA building blocks: summarize → tabulate → plot, all in service of telling a story.
+- Datasets hide in packages (e.g., `Arthritis` in VCD) — `install.packages()` then `library()`.
+- `summary()` gives per-column stats or category counts; `str()` shows data types; `dim()` shows shape.
+- Logical conditions + `[ ]` subset into smaller data frames.
 :::
 
 :::{admonition} Summarizing Data and Visualization
 :class: note dropdown
-Tabulation with the whiteside insulation data (select data by group) and create tables and proportion tables prop.table() using the Arthritis dataset.
+- Package name clashes happen (uninstall/reinstall, e.g., VCD vs MASS); Whiteside insulation dataset.
+- One-way `table(df$col)` and two-way `table(a, b)` are pivot tables in R.
+- `prop.table()` for proportions; `prop.table(x, 1)` row %, `prop.table(x, 2)` column %.
+- Column-wise percentages tell a richer story (treated vs placebo improvement).
 :::
 
 :::{admonition} Summarizing Data and Visualization
 :class: note dropdown
-Use tapply() or aggregate() to tabulate data by group, and note that you can use whatever function you want at the end (you don't have to use mean, you can use median or sd or any other custom function - more examples later on).
+- Three-way `table()` output is messy — `ftable()` flattens it into a clean layout.
+- `tapply(value, group, FUN)` computes a statistic by group (mean/median/sd).
+- `aggregate(y ~ g1 + g2, FUN = mean)` (Dave's go-to) returns a tidy data frame.
+- Rename columns for presentation-ready tables (salary by sex × rank).
 :::
 
 :::{admonition} Summarizing Data and Visualization
 :class: note dropdown
-Figures and Graphics - high-level plot commands where R will automatically create a plot based on the data type, and an introduction to some lower-level plotting commands (adding an abline, annotating with text, xlab and ylab).
+- R chooses a plot from the data type: numeric→index scatter, factor→bar, num~cat→boxplot, cat~cat→mosaic, num~num→scatter.
+- High-level plot + low-level styling: `col`, `pch=19`, `cex`, `type` (l / h / o).
+- Grouped, horizontal, labeled `boxplot()` (`las`); annotate with `abline()` + `text()`.
+- Overlay groups: `plot()` the first group, then `points()` the second (before/after in two colors).
 :::
 
 :::{admonition} Summarizing Data and Visualization
 :class: note dropdown
-par() and opar() are used to create subplots (with defaults that are applied to each argument). How to plot curves, create univariate plots and bivariate plots. Correlograms to show the positive and negative relationship (correlation) between variables.
+- `par(mfrow=c(2,2))` (via opar) for subplots; reset opar afterward.
+- Univariate plots: box, histogram, density — `hist(prob=TRUE)`, `density()` + `polygon()` fill.
+- Box-plot anatomy: Q1/median/Q3, whiskers ~1.5·IQR, outliers; read skew direction.
+- `smoothScatter()` for overplotting; `cor()` + corrgram/`corrplot` for relationships (Boston teaser).
 :::
 
 :::{admonition} Boston Housing EDA
 :class: note dropdown
-Reading in a .csv file into Google Colab, exploring the first few rows of data, summary statistics, converting data types (from numeric to character) and using gsub() to replace values.
+- First local-CSV read in Colab-R: upload via the folder icon (R can't point at Drive like Python can).
+- `colnames()`, `str()`, `dim()`/`nrow()`/`ncol()`, `summary()`; `medv` is the target variable.
+- Spot 0/1 indicators (min 0, max 1), e.g., `chas`; count with `table()`.
+- Recode with `as.character()`/`as.logical()` and `gsub()` (0→"away from", 1→"next to").
 :::
 
 :::{admonition} Boston Housing EDA
 :class: note dropdown
-Univariate and bivariate plots including scatterplots - adding a locally weighted smoother (lowess) line to the plot via the lines() function, and adding custom lines and points to graphs to help tell a better story with data.
+- Dress up histograms: color, labels, title, mean/median `abline`, and a `legend()` (use `bty="n"`).
+- `boxplot()` plus the mean as a `points()` marker (pch 21 with bg/col).
+- KDE via `density()`: red line + `polygon()` fill + dashed mean line.
+- Bivariate scatter + `lowess()` smoother to reveal the trend; a missing quote is your bug, not R's.
 :::
 
 :::{admonition} Boston Housing EDA
 :class: note dropdown
-Advanced EDA - for loops for generating plots, using the describeBy() function from psych to analyze data by groups, saving .csv files to the local runtime (and downloading them on your computer).
+- Drop a column with `-`; base `pairs()` is ugly — `psych::pairs.panels()` adds correlations, hist/density, and ellipses.
+- `corrplot()` for a polished correlation matrix (size + color, upper triangle).
+- `barplot(table(...))` needs table input; a **for-loop** auto-histograms every numeric column (titled after itself).
+- `psych::describeBy(df, group)` for grouped summaries; `write.csv()` to export and download.
 :::
