@@ -1,0 +1,26 @@
+title: "Statistics in Business Analytics"
+author: "Dr. Dave Wanik · University of Connecticut (OPIM 5603)"
+only_build_toc_files: true
+execute:
+  execute_notebooks: "off"
+html:
+  use_repository_button: true
+  home_page_in_navbar: true
+  extra_footer: |
+    <p style="font-size:0.9em;opacity:0.85"><strong>⚠️ Work in progress.</strong> These are living draft materials — actively being written and revised. Many lecture narratives are still being filled in from transcripts. This is a teaching companion, not a final or official reference.</p>
+    <p><em>OPIM 5603 — Statistics in Business Analytics. A fully online, R-based course. Built from Dr. Wanik's lecture videos and Colab (R) notebooks.</em></p>
+repository:
+  url: https://github.com/drdave-teaching/opim5603-textbook
+  branch: main
+parse:
+  myst_enable_extensions:
+    - amsmath
+    - dollarmath
+    - colon_fence
+    - deflist
+sphinx:
+  config:
+    html_show_copyright: false
+    mathjax3_config:
+      tex:
+        inlineMath: [['$', '$']]

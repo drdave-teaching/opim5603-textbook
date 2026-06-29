@@ -1,0 +1,8 @@
+format: jb-book
+root: index
+chapters:
+  - file: module-1-descriptive-statistics
+  - file: module-2-probability-distributions
+  - file: module-3-hypothesis-testing
+  - file: module-4-maximum-likelihood-estimation
+  - file: module-5-regression
