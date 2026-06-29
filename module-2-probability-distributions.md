@@ -1,240 +1,253 @@
-# Module 2 — Probability Distributions
-
-How probability distributions describe data behavior. We master the four core functions — d (density), p (cumulative), q (quantile), r (random) — for discrete (binomial, Poisson) and continuous (uniform, normal, exponential) distributions, then build to sampling distributions, the Central Limit Theorem, and confidence intervals.
+# Chapter 2 — Probability Distributions
 
 :::{admonition} 🔗 Notebooks for this chapter
 :class: seealso dropdown
 Open in Colab and **Runtime → Run all** (R notebooks).
 
-- **CheatSheet pbinom** &nbsp; [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/drdave-teaching/OPIM5603-notebooks/blob/main/Module2/CheatSheet_pbinom.ipynb) &nbsp; [GitHub](https://github.com/drdave-teaching/OPIM5603-notebooks/blob/main/Module2/CheatSheet_pbinom.ipynb)
-- **CheatSheet ttest for Confidence Intervals** &nbsp; [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/drdave-teaching/OPIM5603-notebooks/blob/main/Module2/CheatSheet_ttest_for_Confidence_Intervals.ipynb) &nbsp; [GitHub](https://github.com/drdave-teaching/OPIM5603-notebooks/blob/main/Module2/CheatSheet_ttest_for_Confidence_Intervals.ipynb)
-- **Continuous Distributions** &nbsp; [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/drdave-teaching/OPIM5603-notebooks/blob/main/Module2/Continuous_Distributions.ipynb) &nbsp; [GitHub](https://github.com/drdave-teaching/OPIM5603-notebooks/blob/main/Module2/Continuous_Distributions.ipynb)
 - **Discrete Distributions** &nbsp; [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/drdave-teaching/OPIM5603-notebooks/blob/main/Module2/Discrete_Distributions.ipynb) &nbsp; [GitHub](https://github.com/drdave-teaching/OPIM5603-notebooks/blob/main/Module2/Discrete_Distributions.ipynb)
-- **Estimation and Confidence Intervals** &nbsp; [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/drdave-teaching/OPIM5603-notebooks/blob/main/Module2/Estimation_and_Confidence_Intervals.ipynb) &nbsp; [GitHub](https://github.com/drdave-teaching/OPIM5603-notebooks/blob/main/Module2/Estimation_and_Confidence_Intervals.ipynb)
+- **Continuous Distributions** &nbsp; [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/drdave-teaching/OPIM5603-notebooks/blob/main/Module2/Continuous_Distributions.ipynb) &nbsp; [GitHub](https://github.com/drdave-teaching/OPIM5603-notebooks/blob/main/Module2/Continuous_Distributions.ipynb)
 - **Sampling Methods and CLT** &nbsp; [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/drdave-teaching/OPIM5603-notebooks/blob/main/Module2/Sampling_Methods_and_CLT.ipynb) &nbsp; [GitHub](https://github.com/drdave-teaching/OPIM5603-notebooks/blob/main/Module2/Sampling_Methods_and_CLT.ipynb)
+- **Estimation and Confidence Intervals** &nbsp; [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/drdave-teaching/OPIM5603-notebooks/blob/main/Module2/Estimation_and_Confidence_Intervals.ipynb) &nbsp; [GitHub](https://github.com/drdave-teaching/OPIM5603-notebooks/blob/main/Module2/Estimation_and_Confidence_Intervals.ipynb)
+- **Cheat Sheet — pbinom()** &nbsp; [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/drdave-teaching/OPIM5603-notebooks/blob/main/Module2/CheatSheet_pbinom.ipynb) &nbsp; [GitHub](https://github.com/drdave-teaching/OPIM5603-notebooks/blob/main/Module2/CheatSheet_pbinom.ipynb)
+- **Cheat Sheet — t.test() for CIs** &nbsp; [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/drdave-teaching/OPIM5603-notebooks/blob/main/Module2/CheatSheet_ttest_for_Confidence_Intervals.ipynb) &nbsp; [GitHub](https://github.com/drdave-teaching/OPIM5603-notebooks/blob/main/Module2/CheatSheet_ttest_for_Confidence_Intervals.ipynb)
 :::
 
-## 2.1 Discrete Probability Distributions
 
-### Video 1: Introduction to discrete distributions (Pt. 1)
+Probability distributions are how we describe the way data *behaves*. This chapter builds one toolkit you'll reuse everywhere: the four R functions **d / p / q / r**, applied first to **discrete** distributions (binomial, Poisson), then to **continuous** ones (uniform, normal, exponential). From there we reach the keystone idea of inferential statistics — the **Central Limit Theorem** — and turn it into **confidence intervals** that put honest uncertainty around an estimate.
 
-*✍️ Full narrative coming from the lecture transcript (video being located).*
+```{admonition} Your four favorite letters: d, p, q, r
+:class: note
+Every distribution in R shares four functions. **d** = *density* (the bar height for a discrete value; a likelihood for a continuous one). **p** = *percentile/probability* (cumulative — sum from the left up to a value). **q** = *quantile* (the inverse of p — "what value sits at this percentile?"). **r** = *random* draws. Learn them once on the binomial (`dbinom`/`pbinom`/`qbinom`) and they transfer to every other distribution.
+```
 
-### Video 2: Introduction to discrete distributions (Pt. 2)
+## 2.1 Discrete probability distributions
 
-**Overview.** Using Monte Carlo simulation to create a probability distribution. Introduction to the binomial distribution (heads and tail; successful vs. unsuccessful operation). Advanced use of R code to sum values in a probability distribution (don't worry - it gets easier!).
+Discrete distributions describe **counts** — heads in 10 coin flips, defects per batch. Build intuition by simulation first: `sample()` flips a coin or rolls a die, and a **Monte Carlo** loop turns many trials into an empirical probability distribution.
 
-*✍️ Full narrative coming from the lecture transcript (video being located).*
+Given any discrete distribution, two summaries matter:
 
-### Video 3: Mean and Variance of a Discrete Distribution
+- **Mean** = Σ (value × probability)
+- **Variance** = Σ (value − mean)² × probability
 
-**Overview.** If someone gives you a discrete probability distribution - you are able to calculate the mean and variance of the distribution. You can use R to do this. Mean is just value times probability then sum. Variance is value minus mean, square the difference, multiply times probability, then sum. Note how the probability distribution can be (2, 8, 10) and does not need to be (0, 1, 2)!
+The **binomial** counts successes in *n* independent trials (success probability π): `dbinom` for an exact count, `pbinom` for "k or fewer," `qbinom` for the inverse. Use **complements** (`1 - pbinom(...)`, or `lower.tail = FALSE`) for "more than," and check a `qbinom` answer by feeding it back through `pbinom`. The **Poisson** counts events per unit of time or area with rate λ; the trick is **rescaling λ** to the units in the question (e.g., golf balls landing in the yard per *afternoon* vs. per *hour*).
 
-*✍️ Full narrative coming from the lecture transcript (video being located).*
+## 2.2 Continuous probability distributions
 
-### Video 4: Binomial Distribution (Pt. 1 - d is for density)
+Continuous variables take any value in a range, so the probability of an *exact* point is zero — we always work with **ranges**.
 
-*✍️ Full narrative coming from the lecture transcript (video being located).*
+```{admonition} dnorm is a likelihood, not a probability
+:class: warning
+For continuous distributions you cannot read a probability off a single point — `dnorm(3, ...)` returns a *likelihood*, which is undefined as a probability. Always ask for a **range**: `pnorm(3, ...)` ("≤ 3"), or a difference of two `pnorm` calls for an interval.
+```
 
-### Video 5: Binomial Distribution (Pt. 2 - p is for percentile, q is for quantile)
+**Uniform (the "rectangle").** Parameterized by min `a` and max `b`. The density is constant — `1/(b - a)` — so every interval of equal width is equally likely. Mean = (a + b)/2 and SD = √((b − a)² / 12). The bus-stop example (a bus every 30 minutes, students arriving at random) is pure uniform: `punif` gives "wait ≤ 25 min," its complement gives "wait > 25 min," and a difference of two `punif` calls gives "wait between 10 and 15."
 
-**Overview.** P stands for percentile, which means we are using the cumulative density function (summing all values from the left, up to and including the value of interest!) Q stands for quantile, which means you return the value of the distribution where this is true ('tell me the value of the distribution where 90% of the values will be equal to or below this value'). We also try out complements (1-X) which is not the same things as compliments, and also double check our qbinom() functions by using pbinom().
+**Normal.** Parameterized by mean μ and SD σ: bell-shaped, symmetric, with mean = median = mode and tails that are asymptotic (approach but never touch zero). Same μ with different σ "fans" the curve; same σ with different μ slides the peak. `pnorm`/`qnorm` answer probability and quantile questions, and a Monte Carlo simulation lets you *eyeball-check* the math — and rediscover that ~68% of the mass sits within ±1 SD.
 
-*✍️ Full narrative coming from the lecture transcript (video being located).*
+**Standard normal & z-scores.** Convert any normal to the standard normal with `z = (x − μ) / σ` — literally "how many SDs from the mean." It makes plots intuitive (the x-axis becomes −3…+3) and lets you reuse `pnorm`/`qnorm` with their defaults (mean 0, sd 1). The General Mills cereal-box weight example walks through converting limits to z and shading the region.
 
-### Video 6: Poisson Distribution (D, P, Q for count data)
+**Empirical rule & exponential.** On a normal curve the empirical rule is exact-ish: **68 / 95 / 99.7%** within ±1 / 2 / 3 SD. The **exponential** distribution is the continuous cousin of the Poisson — time-to-event from 0 → ∞ — using **rate = 1/λ** where λ is the mean (supermarket checkout time, power-supply time-to-failure, and the slightly evil warranty-design example).
 
-*✍️ Full narrative coming from the lecture transcript (video being located).*
+## 2.3 Sampling, the Central Limit Theorem & confidence intervals
 
-### Video 7: Wrapping Up
+We sample because reaching a whole population is expensive or impossible (you can't poll every voter or count every blood cell). A **simple random sample** gives every element an equal chance; watch the `replace =` argument (with vs. without replacement changes everything). **Sampling error** is just population mean − sample mean for a given draw.
 
-**Overview.** Quick wrap up and discussion on where we are going next week.
+Here's the keystone experiment (the `women` dataset): draw **10,000 samples of size 5**, keep each sample's *mean*, and plot those 10,000 means.
 
-*✍️ Full narrative coming from the lecture transcript (video being located).*
+```r
+mean_dist <- replicate(10000, mean(sample(women$weight, size = 5, replace = TRUE)))
+hist(mean_dist)
+abline(v = mean(women$weight), col = "blue", lwd = 3)            # population mean
+abline(v = mean(mean_dist),    col = "red",  lwd = 3, lty = 2)   # mean of means
+```
 
-## 2.2 Continuous Probability Distributions
+Two things pop out: the **sampling distribution of the mean is normal**, and the **mean of means lands right on the population mean**. That's the **Central Limit Theorem** — and it holds *for any parent distribution* (the notebook proves it on uniform, exponential, and normal parents). The spread of that sampling distribution is the **standard error**, `σ/√n`, which shrinks as the sample grows.
 
-### Video 1 - (Introduction to Continuous Variables)
+```{admonition} n is the only lever you control
+:class: tip
+You can't change the population mean or σ — they're fixed by reality. The one knob you own is **n**. Because the standard error is σ/√n, collecting more data is the *only* way to tighten your estimate. And note: a **standard error is not a standard deviation** — it's the SD *of the sampling distribution of the mean*.
+```
 
-**Overview.** Setting up your environment, and a comparison of the mean and variance for a continuous distribution vs. a discrete distribution.
+A **confidence interval** marries a point estimate to that uncertainty. When σ is **known**:
 
-*✍️ Full narrative coming from the lecture transcript (video being located).*
+$$\bar{x} \pm z \cdot \frac{\sigma}{\sqrt{n}}$$
 
-### Video 2 - (Uniform Distribution)
+with `z = 1.96` for 95% and `2.58` for 99% (get any z from `qnorm`). When σ is **unknown** (almost always), use the sample SD `s` and the **t distribution**, parameterized by **degrees of freedom = n − 1**:
 
-**Overview.** We'll introduce one of the simpler distributions, the uniform distribution (also known as the rectangle distribution). Your old tools d, p, q, and r work here - we'll apply it to an example where students are waiting for a bus to arrive on campus.
+```r
+z95 <- qnorm(0.975)              # 1.96  (sigma known)
+t95 <- qt(0.975, df = n - 1)     # bigger for small n — the penalty
+ci  <- xbar + c(-1, 1) * t95 * s / sqrt(n)
+```
 
-*✍️ Full narrative coming from the lecture transcript.*
-
-### Video 3 - (Normal Distribution)
-
-**Overview.** The normal distribution is used all over the place and has many desirable properties and attributes. D, p, q and r will be our tools for answering interesting questions about the normal distribution.
-
-*✍️ Full narrative coming from the lecture transcript.*
-
-### Video 4 - (A Quick Refresh and Intro to Standard Normal Distribution)
-
-**Overview.** A quick refresh on probability concepts for continuous distributions, a practice problem for normal distribution, and an overview of z scores and how any normal distribution (with a mean and sd) can be converted into the standard normal distribution (with a mean =0 and sd=1).
-
-*✍️ Full narrative coming from the lecture transcript.*
-
-### Video 5 - (The Empirical Rule and Exponential Distribution)
-
-**Overview.** A deeper understanding of the empirical rule (and standard deviations) and an example of how to use the exponential distribution.
-
-*✍️ Full narrative coming from the lecture transcript.*
-
-## 2.3 Sampling Methods Confidence Intervals
-
-### Video 1: Sampling Methods and CLT (Pt. 1)
-
-**Overview.** Explanation of various sampling methods, motivation for the central limit theorem using the 'women' dataset. Note how the population mean and the 'mean of means' lie directly on top of each other!
-
-*✍️ Full narrative coming from the lecture transcript.*
-
-### Video 2: Sampling Methods and CLT (Pt. 2)
-
-**Overview.** Definition of a sampling distribution, formal definition of the central limit theorem and standard error.
-
-*✍️ Full narrative coming from the lecture transcript.*
-
-### Video 3: Sampling Methods and CLT (Pt. 3)
-
-**Overview.** Some examples in action to show that the central limit theorem really holds true for ANY distribution of ANY shape.
-
-*✍️ Full narrative coming from the lecture transcript.*
-
-### Video 4: Estimation and Confidence Intervals (Pt. 1)
-
-**Overview.** A motivating introduction of why you shouldn't just report the point estimate - use a confidence interval!
-
-*✍️ Full narrative coming from the lecture transcript.*
-
-### Video 5: Estimation and Confidence Intervals (Pt. 2)
-
-**Overview.** We will explore the general formula for making a confidence interval for the population mean when the standard deviation is KNOWN. In practice, you will probably NEVER know the population standard deviation. But you should be familiar with the formula, z distribution (standard normal distribution) and z related values, and how this all ties back to the Central Limit Theorem.
-
-*✍️ Full narrative coming from the lecture transcript.*
-
-### Video 6: Estimation and Confidence Intervals (Pt. 3)
-
-**Overview.** A worked example for when the population standard deviation is known (use the z-distribution). Then, a worked example for when the population standard deviation is unknown (use the t-distribution!) Note that t should be a little bigger than z when sample size is small, this is because we are MORE UNCERTAIN for a given level of confidence.
-
-*✍️ Full narrative coming from the lecture transcript.*
-
-### Video 7: Estimation and Confidence Intervals (Pt. 4)
-
-**Overview.** Let's extend what we have learned to proportions. Proportions are weird quantities - there is no standard deviation involved! We'll show you that the math is not too hard - you just need to manipulate your sample proportion and sample size to calculate your confidence interval. We'll also show how to calculate sample size needed given constraints (like you must be within $10 and a level of 95% confidence) - this holds true for both population means and proportions.
-
-*✍️ Full narrative coming from the lecture transcript.*
+The t value is a **penalty for small samples** (more uncertainty when you don't know σ), and it **converges to z** as n grows — so for large samples the two are interchangeable. For **proportions** there's no SD; use `p̂ ± z·√(p̂(1−p̂)/n)` after checking `n·p̂ ≥ 5` and `n·(1−p̂) ≥ 5` (the union-merger example). Finally, you can **plan sample size**: rearrange the error formula to `n = (z·σ / E)²` for a mean (or the proportion analog, using 0.5 when p is unknown) — a tighter margin or higher confidence costs you more observations.
 
 ## Wrap-up
 
 ```{admonition} Key takeaways
 :class: tip
-- Discrete vs. continuous distributions; compute a distribution's **mean and variance**.
-- Master **d / p / q / r** for binomial, Poisson, uniform, normal, exponential.
-- The **Central Limit Theorem**: the mean of sample means approximates the population mean.
-- Build **confidence intervals** for the mean (σ known → z; σ unknown → t).
+- **d / p / q / r** work for every distribution — learn them on the binomial, reuse everywhere; use **complements** and check `q` with `p`.
+- **Discrete** (binomial, Poisson): mean = Σ value·prob, variance = Σ (value−mean)²·prob; rescale Poisson λ to the right units.
+- **Continuous**: probability is over **ranges** (`dnorm` is a likelihood). Uniform = rectangle; normal = μ, σ; convert to **z-scores** for the standard normal; exponential uses **rate 1/λ**.
+- **CLT**: the sampling distribution of the mean is **normal** for any parent, and the **mean of means ≈ the population mean**; spread = **standard error σ/√n**.
+- **Confidence intervals**: `x̄ ± z·σ/√n` (σ known) or the **t** version with **df = n−1** (σ unknown); proportions use `p̂ ± z·√(p̂(1−p̂)/n)`.
+- You only control **n** — bigger samples shrink the interval; you can solve for the **n** a target margin/confidence requires.
 ```
+
 
 ---
 
 ## 📌 Lecture key points
 
-*Quick reference — one card per lecture (click to expand).*
+*Distilled takeaways from the video lectures behind this chapter — click each to expand.*
 
-:::{admonition} Introduction to discrete distributions
+
+:::{admonition} Introduction to discrete distributions (Pt. 1)
 :class: note dropdown
-Key points will be distilled from the lecture transcript.
+- Set up the runtime; simulate randomness with `sample()` (flip a coin, roll a die).
+- Introduces the idea of a **probability distribution**.
+- Flip a coin 10 times to watch outcomes vary around the expectation.
+- Builds intuition before formulas.
 :::
 
-:::{admonition} Introduction to discrete distributions
+:::{admonition} Introduction to discrete distributions (Pt. 2)
 :class: note dropdown
-Using Monte Carlo simulation to create a probability distribution. Introduction to the binomial distribution (heads and tail; successful vs. unsuccessful operation). Advanced use of R code to sum values in a probability distribution (don't worry - it gets easier!).
+- Use **Monte Carlo simulation** to build a probability distribution empirically.
+- Introduces the **binomial** (success/failure, e.g., heads/tails).
+- Sum probabilities across a distribution in R.
+- It gets easier with practice.
 :::
 
 :::{admonition} Mean and Variance of a Discrete Distribution
 :class: note dropdown
-If someone gives you a discrete probability distribution - you are able to calculate the mean and variance of the distribution. You can use R to do this. Mean is just value times probability then sum. Variance is value minus mean, square the difference, multiply times probability, then sum. Note how the probability distribution can be (2, 8, 10) and does not need to be (0, 1, 2)!
+- **Mean** = Σ (value × probability).
+- **Variance** = Σ (value − mean)² × probability.
+- Compute both directly in R.
+- The values can be anything (e.g., 2, 8, 10) — not just 0, 1, 2.
 :::
 
-:::{admonition} Binomial Distribution
+:::{admonition} Binomial Distribution (Pt. 1 — d is for density)
 :class: note dropdown
-Key points will be distilled from the lecture transcript.
+- **`dbinom`** gives the probability of an exact number of successes.
+- The binomial counts successes in *n* independent trials.
+- "d" = density = the bar height.
+- Foundation for the p/q functions next.
 :::
 
-:::{admonition} Binomial Distribution
+:::{admonition} Binomial Distribution (Pt. 2 — p is percentile, q is quantile)
 :class: note dropdown
-P stands for percentile, which means we are using the cumulative density function (summing all values from the left, up to and including the value of interest!) Q stands for quantile, which means you return the value of the distribution where this is true ('tell me the value of the distribution where 90% of the values will be equal to or below this value'). We also try out complements (1-X) which is not the same things as compliments, and also double check our qbinom() functions by using pbinom().
+- **p** = cumulative (sum from the left); **q** = the value at a given percentile.
+- Use **complements** (1 − P) for "greater than" — not the same as compliments!
+- Double-check `qbinom` answers with `pbinom`.
+- The d/p/q pattern is now in place.
 :::
 
-:::{admonition} Poisson Distribution
+:::{admonition} Poisson Distribution (D, P, Q for count data)
 :class: note dropdown
-Key points will be distilled from the lecture transcript.
+- Apply d/p/q to the **Poisson** (counts per unit time/area).
+- The trick: **rescale λ** for different units of time or area (golf-balls-in-the-yard example).
+- d = bar value, p = from the left, q = inverse percentile.
+- Same workflow as the binomial.
 :::
 
 :::{admonition} Wrapping Up
 :class: note dropdown
-Quick wrap up and discussion on where we are going next week.
+- Quick recap of discrete distributions.
+- Preview of where the course heads next (continuous distributions).
 :::
 
-:::{admonition} Video 1 -
+:::{admonition} Introduction to Continuous Variables
 :class: note dropdown
-Setting up your environment, and a comparison of the mean and variance for a continuous distribution vs. a discrete distribution.
+- Set up the environment for continuous distributions.
+- Contrast **mean and variance** for a continuous vs. a discrete distribution.
+- Probability now lives over **ranges**, not single points.
+- Sets up uniform / normal / exponential.
 :::
 
-:::{admonition} Video 2 -
+:::{admonition} Uniform Distribution
 :class: note dropdown
-We'll introduce one of the simpler distributions, the uniform distribution (also known as the rectangle distribution). Your old tools d, p, q, and r work here - we'll apply it to an example where students are waiting for a bus to arrive on campus.
+- The "rectangle" distribution, parameterized by min **a** and max **b**; density = 1/(b−a).
+- Mean = (a+b)/2; SD = √((b−a)²/12).
+- Bus-stop example; `punif` for tails, complement for the upper tail, difference for a middle range.
+- Every equal-width interval is equally likely.
 :::
 
-:::{admonition} Video 3 -
+:::{admonition} Normal Distribution
 :class: note dropdown
-The normal distribution is used all over the place and has many desirable properties and attributes. D, p, q and r will be our tools for answering interesting questions about the normal distribution.
+- Parameterized by μ and σ; bell-shaped, symmetric, mean = median = mode, asymptotic tails.
+- `pnorm`/`qnorm` for probabilities and quantiles; verify with a Monte Carlo simulation.
+- Same μ / different σ "fans"; same σ / different μ shifts the peak.
+- ~68% within ±1 SD ties back to the empirical rule.
 :::
 
-:::{admonition} Video 4 -
+:::{admonition} A Quick Refresh and Intro to the Standard Normal
 :class: note dropdown
-A quick refresh on probability concepts for continuous distributions, a practice problem for normal distribution, and an overview of z scores and how any normal distribution (with a mean and sd) can be converted into the standard normal distribution (with a mean =0 and sd=1).
+- Continuous probability is over a range; `dnorm` at a point is a **likelihood**, technically undefined.
+- **z-score** = (x − μ)/σ = how many SDs from the mean.
+- Any normal converts to the **standard normal** (mean 0, sd 1) — `pnorm`/`qnorm` defaults.
+- Cereal-box example: convert limits to z, then shade the region.
 :::
 
-:::{admonition} Video 5 -
+:::{admonition} The Empirical Rule and Exponential Distribution
 :class: note dropdown
-A deeper understanding of the empirical rule (and standard deviations) and an example of how to use the exponential distribution.
+- Empirical rule (normal): **68 / 95 / 99.7%** within ±1 / 2 / 3 SD; matches `pnorm` differences.
+- **Exponential** = continuous time-to-event (0 → ∞), the continuous cousin of the Poisson.
+- Use **rate = 1/λ** where λ is the mean; `pexp` for probabilities.
+- Checkout-time and warranty-design examples.
 :::
 
-:::{admonition} Sampling Methods and CLT
+:::{admonition} Sampling Methods and CLT (Pt. 1)
 :class: note dropdown
-Explanation of various sampling methods, motivation for the central limit theorem using the 'women' dataset. Note how the population mean and the 'mean of means' lie directly on top of each other!
+- Population vs sample; parameters (Greek) estimated by statistics (Roman).
+- We sample because populations are costly or infinite; use a **simple random sample**.
+- Watch `replace =` (with vs. without replacement); **sampling error** = population − sample mean.
+- 10,000 samples of size 5 → the **mean of means ≈ the population mean**.
 :::
 
-:::{admonition} Sampling Methods and CLT
+:::{admonition} Sampling Methods and CLT (Pt. 2)
 :class: note dropdown
-Definition of a sampling distribution, formal definition of the central limit theorem and standard error.
+- Those 10,000 sample means form a **sampling distribution of the mean** — and it's normal.
+- **Standard error** = σ/√n = the SD of that sampling distribution (≠ a plain SD).
+- Bigger n ⇒ smaller standard error ⇒ tighter estimate.
+- The bridge into inferential statistics.
 :::
 
-:::{admonition} Sampling Methods and CLT
+:::{admonition} Sampling Methods and CLT (Pt. 3)
 :class: note dropdown
-Some examples in action to show that the central limit theorem really holds true for ANY distribution of ANY shape.
+- The **CLT holds for ANY parent** — demonstrated on uniform, exponential, and normal.
+- Even tiny samples (n = 2) start to look normal once you average many of them.
+- Larger n tightens the spread (σ/√n) and centers on the population mean.
+- The biggest takeaway: more data ⇒ less uncertainty.
 :::
 
-:::{admonition} Estimation and Confidence Intervals
+:::{admonition} Estimation and Confidence Intervals (Pt. 1)
 :class: note dropdown
-A motivating introduction of why you shouldn't just report the point estimate - use a confidence interval!
+- Don't just report a point estimate — wrap it in a **confidence interval**.
+- The sample mean is the best estimate of the population mean.
+- **Level of confidence** (e.g., 95%); alpha = 1 − level.
+- Two cases ahead: σ known (use z) vs σ unknown (use t — a "penalty shot").
 :::
 
-:::{admonition} Estimation and Confidence Intervals
+:::{admonition} Estimation and Confidence Intervals (Pt. 2)
 :class: note dropdown
-We will explore the general formula for making a confidence interval for the population mean when the standard deviation is KNOWN. In practice, you will probably NEVER know the population standard deviation. But you should be familiar with the formula, z distribution (standard normal distribution) and z related values, and how this all ties back to the Central Limit Theorem.
+- A CI is just **center ± spread** of the sample.
+- σ known: `x̄ ± z·σ/√n`; **z = 1.96** (95%), **2.58** (99%) via `qnorm`.
+- Standard error σ/√n shrinks with n ⇒ tighter interval.
+- You control only n — collect more data to be more confident.
 :::
 
-:::{admonition} Estimation and Confidence Intervals
+:::{admonition} Estimation and Confidence Intervals (Pt. 3)
 :class: note dropdown
-A worked example for when the population standard deviation is known (use the z-distribution). Then, a worked example for when the population standard deviation is unknown (use the t-distribution!) Note that t should be a little bigger than z when sample size is small, this is because we are MORE UNCERTAIN for a given level of confidence.
+- σ **unknown** ⇒ use the sample SD `s` and the **t distribution** (df = n − 1).
+- `qt()` gives a bigger multiplier than z for small n — the penalty.
+- t **converges to z** as n grows (≈ identical by n ≈ 100+).
+- Worked tire-tread example builds and interprets the interval.
 :::
 
-:::{admonition} Estimation and Confidence Intervals
+:::{admonition} Estimation and Confidence Intervals (Pt. 4)
 :class: note dropdown
-Let's extend what we have learned to proportions. Proportions are weird quantities - there is no standard deviation involved! We'll show you that the math is not too hard - you just need to manipulate your sample proportion and sample size to calculate your confidence interval. We'll also show how to calculate sample size needed given constraints (like you must be within $10 and a level of 95% confidence) - this holds true for both population means and proportions.
+- **Proportions**: `p̂ ± z·√(p̂(1−p̂)/n)` — no SD term; check `n·p̂ ≥ 5` and `n·(1−p̂) ≥ 5`.
+- Union-merger example interprets the interval against a threshold.
+- **Sample-size planning**: `n = (z·σ/E)²` for a mean; analog for proportions (use 0.5 when unknown).
+- Tighter margin / higher confidence ⇒ more observations.
 :::
