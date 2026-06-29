@@ -1,3 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="118" viewBox="0 0 1000 118" role="img" style="width:100%;height:auto;display:block;margin-bottom:1rem">
+<title>OPIM 5603 course banner</title>
+<rect x="0" y="0" width="1000" height="118" rx="12" fill="#B91C1C"/>
+<rect x="0" y="0" width="9" height="118" rx="4.5" fill="#7F1212"/>
+<text x="848" y="96" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="86" font-weight="700" fill="#E06A6A" opacity="0.45">5603</text>
+<text x="40" y="50" font-family="Arial, Helvetica, sans-serif" font-size="31" font-weight="700" fill="#ffffff">OPIM 5603</text>
+<text x="42" y="78" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="400" fill="#F6DEDE">Statistics in Business Analytics</text>
+<text x="42" y="103" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#ffffff">Dr. Dave Wanik</text>
+<text x="158" y="103" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="400" fill="#F6DEDE">· University of Connecticut</text>
+</svg>
+
 # Statistics in Business Analytics
 ### An R-based course companion — OPIM 5603
 
@@ -72,5 +83,6 @@ By the end of the course you should be able to:
 
 ---
 
-*Build status: structure and resources complete from the HuskyCT layout; lecture narratives
-are filled in as transcripts are pulled and polished. See `ebook/README.md`.*
+*Build status: structure, lecture overviews, and Colab (R) notebooks are in place; full
+lecture narratives are filled in as video transcripts are polished. Notebooks live in
+[OPIM5603-notebooks](https://github.com/drdave-teaching/OPIM5603-notebooks).*
