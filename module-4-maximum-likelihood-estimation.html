@@ -1,0 +1,667 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Chapter 4 — Maximum Likelihood Estimation &#8212; Statistics in Business Analytics</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=cb00a2e8" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=b8b12719"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"]]}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'module-4-maximum-likelihood-estimation';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Chapter 5 — Regression" href="module-5-regression.html" />
+    <link rel="prev" title="Chapter 3 — Hypothesis Testing" href="module-3-hypothesis-testing.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+<aside class="bd-header-announcement" aria-label="Announcement">
+  <div class="bd-header-announcement__content">📊 <strong>OPIM 5603 · Statistics in Business Analytics</strong> — draft course companion (work in progress)</div>
+</aside>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Statistics in Business Analytics</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="module-1-descriptive-statistics.html">Chapter 1 — Describing Data with R</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module-2-probability-distributions.html">Chapter 2 — Probability Distributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module-3-hypothesis-testing.html">Chapter 3 — Hypothesis Testing</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Chapter 4 — Maximum Likelihood Estimation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module-5-regression.html">Chapter 5 — Regression</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/module-4-maximum-likelihood-estimation.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Chapter 4 — Maximum Likelihood Estimation</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#likelihood-vs-probability">4.1 Likelihood vs. probability</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-likelihood-function-and-log-likelihood">4.2 The likelihood function and log-likelihood</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#three-ways-to-optimize">4.3 Three ways to optimize</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#over-dispersion-and-the-zero-inflated-poisson">4.4 Over-dispersion and the zero-inflated Poisson</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#from-mle-to-regression-the-linear-model">4.5 From MLE to regression — the linear model</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generalized-linear-models-logistic-poisson-regression">4.6 Generalized linear models: logistic &amp; Poisson regression</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#confidence-intervals-by-bootstrap">4.7 Confidence intervals by bootstrap</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#wrap-up">Wrap-up</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-key-points">📌 Lecture key points</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="chapter-4-maximum-likelihood-estimation">
+<h1>Chapter 4 — Maximum Likelihood Estimation<a class="headerlink" href="#chapter-4-maximum-likelihood-estimation" title="Link to this heading">#</a></h1>
+<div class="seealso dropdown admonition">
+<p class="admonition-title">🔗 Notebooks for this chapter</p>
+<p>Open in Colab and <strong>Runtime → Run all</strong> (R notebooks).</p>
+<ul class="simple">
+<li><p><strong>MLE and Regression</strong>   <a class="reference external" href="https://colab.research.google.com/github/drdave-teaching/OPIM5603-notebooks/blob/main/Module4/MLE_and_Regression_R.ipynb"><img alt="Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a>   <a class="reference external" href="https://github.com/drdave-teaching/OPIM5603-notebooks/blob/main/Module4/MLE_and_Regression_R.ipynb">GitHub</a></p></li>
+</ul>
+</div>
+<p>Hypothesis testing asked, “given a claim about the population, is my sample extreme?” <strong>Maximum likelihood estimation (MLE)</strong> flips the question: <em>given the data, what population most likely produced it?</em> This chapter builds likelihood from scratch, optimizes it three ways, and then delivers the payoff — MLE is the engine under <strong>regression</strong>, including the <strong>generalized linear models</strong> (logistic, Poisson) you’ll use constantly.</p>
+<section id="likelihood-vs-probability">
+<h2>4.1 Likelihood vs. probability<a class="headerlink" href="#likelihood-vs-probability" title="Link to this heading">#</a></h2>
+<p>Back with continuous distributions we avoided point estimates and <code class="docutils literal notranslate"><span class="pre">dnorm</span></code>. Now we use it on purpose: <code class="docutils literal notranslate"><span class="pre">dnorm(x,</span> <span class="pre">mean,</span> <span class="pre">sd)</span></code> is the <strong>likelihood</strong> of observing one data point under an assumed mean and SD. If the data clusters around 5 and you <em>assume</em> the mean is 10, the low observations become very unlikely — that mismatch is exactly what likelihood measures. Likelihood is <em>like</em> a probability (bounded 0–1) but describes the parameters given the data, not the other way around.</p>
+</section>
+<section id="the-likelihood-function-and-log-likelihood">
+<h2>4.2 The likelihood function and log-likelihood<a class="headerlink" href="#the-likelihood-function-and-log-likelihood" title="Link to this heading">#</a></h2>
+<p>Assuming observations are <strong>independent</strong>, the likelihood of the <em>whole</em> sample is the product of each point’s <code class="docutils literal notranslate"><span class="pre">dnorm</span></code> — just like “the probability of rolling three sixes is 1/6 × 1/6 × 1/6”:</p>
+<div class="math notranslate nohighlight">
+\[L(m) = \prod_{i=1}^{n} P(x_i \mid m)\]</div>
+<p>Multiplying 56 tiny numbers underflows, so we take the <strong>log</strong> and <em>sum</em> instead — the <strong>log-likelihood</strong>. Maximizing it (the <strong>least-negative</strong> value) gives the <strong>maximum likelihood estimate</strong>.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">LL_mean</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="n">m</span><span class="p">)</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="nf">dnorm</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">sd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="n">log</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">))</span><span class="w">  </span><span class="c1"># log-likelihood</span>
+<span class="n">ms</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">seq</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="m">10</span><span class="p">,</span><span class="w"> </span><span class="n">by</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0.1</span><span class="p">)</span>
+<span class="n">res</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">sapply</span><span class="p">(</span><span class="n">ms</span><span class="p">,</span><span class="w"> </span><span class="n">LL_mean</span><span class="p">)</span>
+<span class="nf">plot</span><span class="p">(</span><span class="n">ms</span><span class="p">,</span><span class="w"> </span><span class="n">res</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;l&quot;</span><span class="p">);</span><span class="w">  </span><span class="n">ms</span><span class="p">[</span><span class="nf">which.max</span><span class="p">(</span><span class="n">res</span><span class="p">)]</span><span class="w">   </span><span class="c1"># the peak ≈ the sample mean</span>
+</pre></div>
+</div>
+<p>The grid search peaks at the <strong>sample mean</strong> — a first hint that MLE recovers the estimators you already know.</p>
+</section>
+<section id="three-ways-to-optimize">
+<h2>4.3 Three ways to optimize<a class="headerlink" href="#three-ways-to-optimize" title="Link to this heading">#</a></h2>
+<p>Every MLE problem is: <strong>specify the model form → write the likelihood → take the log → optimize.</strong> Three ways to do that last step:</p>
+<ul class="simple">
+<li><p><strong>Grid search</strong> — try many parameter values and keep the best (fine for one parameter, hopeless for many).</p></li>
+<li><p><strong>Analytical</strong> — calculus: set the derivative of the log-likelihood to zero (a flat slope = the top of the hill). For a <strong>Bernoulli</strong> the MLE of π is <em>successes/total</em>; for a <strong>Poisson</strong> the MLE of λ is the <em>mean</em>. Tidy, but only for simple cases.</p></li>
+<li><p><strong>Numeric</strong> — let an optimizer search the parameter space with gradients. We use <strong><code class="docutils literal notranslate"><span class="pre">bbmle::mle2()</span></code></strong>, which <em>minimizes</em>, so we feed it the <strong>negative</strong> log-likelihood.</p></li>
+</ul>
+</section>
+<section id="over-dispersion-and-the-zero-inflated-poisson">
+<h2>4.4 Over-dispersion and the zero-inflated Poisson<a class="headerlink" href="#over-dispersion-and-the-zero-inflated-poisson" title="Link to this heading">#</a></h2>
+<p>A core Poisson assumption is <strong>mean = variance = λ</strong>. In <code class="docutils literal notranslate"><span class="pre">data2</span></code>, <code class="docutils literal notranslate"><span class="pre">x1</span></code> honors that, but <code class="docutils literal notranslate"><span class="pre">x2</span></code> is swamped with <strong>zeros</strong> (variance ≈ 2× the mean) — <strong>over-dispersion</strong>. A plain Poisson with λ = the mean puts too much mass in the “1” bin and misses reality. The fix is a <strong>zero-inflated Poisson</strong>: a <strong>Bernoulli</strong> part for the structural zeros times a <strong>Poisson</strong> part for the counts (think safe vs. reckless drivers — most file zero claims; the rest follow a Poisson). The math gets intractable by hand, which is exactly why we lean on <strong>numeric optimization</strong>.</p>
+</section>
+<section id="from-mle-to-regression-the-linear-model">
+<h2>4.5 From MLE to regression — the linear model<a class="headerlink" href="#from-mle-to-regression-the-linear-model" title="Link to this heading">#</a></h2>
+<p>Here’s the light-bulb. Write the linear model with its <strong>error term</strong>:</p>
+<div class="math notranslate nohighlight">
+\[y = \beta_0 + \beta_1 x_1 + \varepsilon, \qquad \varepsilon \sim \text{Normal}(0, \sigma)\]</div>
+<p>Rearranged, the error <code class="docutils literal notranslate"><span class="pre">y</span> <span class="pre">−</span> <span class="pre">β₀</span> <span class="pre">−</span> <span class="pre">β₁x</span></code> is normally distributed — so we can <strong>maximize the likelihood of the errors</strong> and solve for β₀, β₁, and σ <em>simultaneously</em> with <code class="docutils literal notranslate"><span class="pre">mle2()</span></code>. On the corn/nitrate data, the <strong>baseline</strong> (predict the mean) has SST with σ = 2171; the fitted model gets σ = <strong>1940</strong> (smaller error). <code class="docutils literal notranslate"><span class="pre">R²</span> <span class="pre">=</span> <span class="pre">1</span> <span class="pre">−</span> <span class="pre">SSE/SST</span> <span class="pre">=</span> <span class="pre">0.20</span></code> — fertilizer explains ~20% of yield. <code class="docutils literal notranslate"><span class="pre">lm()</span></code> reproduces the same coefficients, the <strong>slope</strong> is the marginal effect (one unit of nitrate → +51.5 yield), and each coefficient’s <strong>p-value</strong> tests H₀: coef = 0.</p>
+<div class="tip admonition">
+<p class="admonition-title">bbmle in practice</p>
+<p>Give <code class="docutils literal notranslate"><span class="pre">mle2()</span></code> sensible <strong>starting values</strong> (coefficients at 0, σ at the target’s SD) and <strong>bounds</strong> (no negative σ — use the <code class="docutils literal notranslate"><span class="pre">L-BFGS-B</span></code> method). It’s gradient-based, so it can land in a local optimum — try a few starts. In real work you’ll just call <strong><code class="docutils literal notranslate"><span class="pre">lm()</span></code>/<code class="docutils literal notranslate"><span class="pre">glm()</span></code></strong>; the MLE machinery is what’s running underneath.</p>
+</div>
+<p>Linear-model assumptions to honor before you trust inference: <strong>(1)</strong> a normally distributed target, <strong>(2)</strong> homoscedastic errors (no fanning in actual-vs-error), <strong>(3)</strong> errors uncorrelated with the predictors, <strong>(4)</strong> independent observations (no time dependence).</p>
+</section>
+<section id="generalized-linear-models-logistic-poisson-regression">
+<h2>4.6 Generalized linear models: logistic &amp; Poisson regression<a class="headerlink" href="#generalized-linear-models-logistic-poisson-regression" title="Link to this heading">#</a></h2>
+<p>When the target isn’t continuous-normal, <strong>transform it</strong> and keep the linear core (a GLM):</p>
+<ul class="simple">
+<li><p><strong>Logistic regression</strong> (binary target — grad-school <code class="docutils literal notranslate"><span class="pre">admit</span></code>): the <strong>logistic transform</strong> <code class="docutils literal notranslate"><span class="pre">π</span> <span class="pre">=</span> <span class="pre">eˣ/(1</span> <span class="pre">+</span> <span class="pre">eˣ)</span></code> turns log-odds into a linear model. <code class="docutils literal notranslate"><span class="pre">mle2</span></code> estimates the coefficients; <strong>stars = significant</strong> (GRE wasn’t). Interpret on the <strong>odds</strong> scale: a coefficient of 0.88 means <code class="docutils literal notranslate"><span class="pre">e^0.88</span> <span class="pre">=</span> <span class="pre">2.41×</span></code> the odds of admission per +1 GPA.</p></li>
+<li><p><strong>Poisson regression</strong> (count target — <code class="docutils literal notranslate"><span class="pre">days</span> <span class="pre">absent</span></code> in <code class="docutils literal notranslate"><span class="pre">student.csv</span></code>): model <code class="docutils literal notranslate"><span class="pre">log</span> <span class="pre">λ</span></code> as linear, then <strong>exponentiate</strong> coefficients for a <em>multiplicative</em> effect (e.g., <code class="docutils literal notranslate"><span class="pre">e^-0.6</span> <span class="pre">=</span> <span class="pre">0.45×</span></code> fewer absences as progress rises).</p></li>
+</ul>
+<div class="note admonition">
+<p class="admonition-title">Comparing models: −2 log-likelihood → AIC/BIC</p>
+<p><code class="docutils literal notranslate"><span class="pre">mle2</span></code> reports <strong>−2 log-likelihood</strong> as a fit metric (smaller is better). <strong>AIC</strong> and <strong>BIC</strong> add it to a penalty for the number of parameters (BIC also for sample size). The numbers are meaningless alone — they matter when you <strong>compare</strong> models: if dropping an insignificant term barely changes the fit, prefer the simpler model (<strong>parsimony</strong>).</p>
+</div>
+</section>
+<section id="confidence-intervals-by-bootstrap">
+<h2>4.7 Confidence intervals by bootstrap<a class="headerlink" href="#confidence-intervals-by-bootstrap" title="Link to this heading">#</a></h2>
+<p>One sample gives one MLE. To put uncertainty around it, <strong>bootstrap</strong>: resample the data <em>with replacement</em> many times, re-estimate the parameter each time, and read the 2.5th/97.5th percentiles. For <code class="docutils literal notranslate"><span class="pre">data1$x1</span></code>, the mean MLE is 5.73 with a 95% bootstrap CI of roughly <strong>5.2–6.27</strong> — the CLT idea from Chapter 2, reused.</p>
+</section>
+<section id="wrap-up">
+<h2>Wrap-up<a class="headerlink" href="#wrap-up" title="Link to this heading">#</a></h2>
+<div class="tip admonition">
+<p class="admonition-title">Key takeaways</p>
+<ul class="simple">
+<li><p><strong>MLE</strong> asks which parameters make the observed data most likely; <code class="docutils literal notranslate"><span class="pre">dnorm</span></code>/<code class="docutils literal notranslate"><span class="pre">dpois</span></code> give per-point <strong>likelihood</strong>.</p></li>
+<li><p>Likelihood is a <strong>product</strong> over independent points → use <strong>log-likelihood</strong> (a sum) and <strong>maximize</strong> it (least-negative).</p></li>
+<li><p>Optimize by <strong>grid search</strong>, <strong>analytical calculus</strong> (Bernoulli MLE = successes/total; Poisson MLE = mean), or <strong>numeric <code class="docutils literal notranslate"><span class="pre">bbmle::mle2</span></code></strong> (minimize the <em>negative</em> log-likelihood).</p></li>
+<li><p><strong>Over-dispersion</strong> (variance ≫ mean, excess zeros) calls for a <strong>zero-inflated Poisson</strong> (Bernoulli × Poisson).</p></li>
+<li><p>Regression <em>is</em> MLE on a <strong>normal error term</strong>: <code class="docutils literal notranslate"><span class="pre">mle2</span></code> (or <code class="docutils literal notranslate"><span class="pre">lm</span></code>) solves β’s and σ; check <strong>R²</strong>, the slope’s meaning, the p-value, and the <strong>four LM assumptions</strong>.</p></li>
+<li><p><strong>GLMs</strong>: logistic (logistic transform, interpret <strong>odds</strong> via <code class="docutils literal notranslate"><span class="pre">e^coef</span></code>) and Poisson (<code class="docutils literal notranslate"><span class="pre">log</span> <span class="pre">λ</span></code> linear, interpret multiplicatively); compare models with <strong>−2 log-likelihood → AIC/BIC</strong> and favor parsimony.</p></li>
+<li><p>Put a <strong>bootstrap</strong> confidence interval around any MLE.</p></li>
+</ul>
+</div>
+</section>
+<hr class="docutils" />
+<section id="lecture-key-points">
+<h2>📌 Lecture key points<a class="headerlink" href="#lecture-key-points" title="Link to this heading">#</a></h2>
+<p><em>Distilled takeaways from the video lectures behind this chapter — click each to expand.</em></p>
+<div class="note dropdown admonition">
+<p class="admonition-title">Intro to Statistical Estimation</p>
+<ul class="simple">
+<li><p>Estimation flips testing: <em>given the data, what population most likely generated it?</em></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dnorm(x,</span> <span class="pre">mean,</span> <span class="pre">sd)</span></code> = the <strong>likelihood</strong> of one point under assumed parameters.</p></li>
+<li><p>Assume the wrong mean (e.g., 10 for data centered at 5) and low values become very unlikely.</p></li>
+<li><p>Likelihood is like a probability (0–1) but about parameters given data.</p></li>
+<li><p>Visualize a point’s likelihood on the assumed curve.</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">How to Calculate Likelihood and Log-Likelihood</p>
+<ul class="simple">
+<li><p>Independence ⇒ sample <strong>likelihood = product</strong> of each point’s <code class="docutils literal notranslate"><span class="pre">dnorm</span></code>.</p></li>
+<li><p>Tiny products underflow ⇒ take the <strong>log</strong> and <strong>sum</strong> (<code class="docutils literal notranslate"><span class="pre">log</span> <span class="pre">=</span> <span class="pre">TRUE</span></code>).</p></li>
+<li><p><strong>Maximize</strong> log-likelihood = pick the least-negative value.</p></li>
+<li><p>Grid search over m peaks at the <strong>sample mean</strong>.</p></li>
+<li><p>Wrap it in a function and <code class="docutils literal notranslate"><span class="pre">sapply</span></code> over candidate values, then plot.</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Analytical vs. Numeric Approaches for MLE</p>
+<ul class="simple">
+<li><p>Steps: model form → likelihood → log-likelihood → optimize.</p></li>
+<li><p><strong>Analytical</strong>: set the derivative to 0 — Bernoulli MLE = successes/total; Poisson MLE = mean.</p></li>
+<li><p>A zero slope is the top of the likelihood hill.</p></li>
+<li><p><strong>Numeric</strong>: optimizers (gradients) scale to many parameters.</p></li>
+<li><p>You won’t do the calculus by hand — <code class="docutils literal notranslate"><span class="pre">bbmle</span></code> handles it.</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">data2.csv, Zero-Inflated Poisson &amp; Numeric Approaches</p>
+<ul class="simple">
+<li><p>Poisson assumes <strong>mean = variance</strong>; excess zeros break that (over-dispersion).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">data2$x2</span></code>: variance ≈ 2× mean ⇒ a plain Poisson misfits.</p></li>
+<li><p><strong>Zero-inflated Poisson</strong> = Bernoulli (structural zeros) × Poisson (counts).</p></li>
+<li><p>Safe-vs-reckless-driver intuition for the two processes.</p></li>
+<li><p>Analytical math gets intractable ⇒ use numeric <code class="docutils literal notranslate"><span class="pre">mle2</span></code>.</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Estimating parameters from different distributions</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">bbmle::mle2()</span></code> with a negative-log-likelihood function + starting values.</p></li>
+<li><p>Estimate mean alone, or <strong>mean and σ together</strong> (needs bounds: no negative σ, <code class="docutils literal notranslate"><span class="pre">L-BFGS-B</span></code>).</p></li>
+<li><p>Poisson λ and zero-inflated-Poisson (λ and p) likewise.</p></li>
+<li><p>Summary gives estimate, standard error, z, and −2 log-likelihood.</p></li>
+<li><p>Wrong model form can “wash out” (e.g., p → 0) — read the output.</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Confidence Intervals and Standard Errors estimates</p>
+<ul class="simple">
+<li><p>One sample → one MLE; quantify it with a <strong>bootstrap</strong>.</p></li>
+<li><p>Resample <strong>with replacement</strong> to the same size, re-estimate many times.</p></li>
+<li><p>The spread of estimates is the sampling distribution → a <strong>95% CI</strong>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">data1$x1</span></code>: mean 5.73, CI ≈ 5.2–6.27.</p></li>
+<li><p>Reuses the CLT/bootstrapping idea from Module 2.</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Linear regression with Corn.csv (Pt. 1)</p>
+<ul class="simple">
+<li><p>Goal: predict <strong>yield</strong> from <strong>nitrate</strong>; the payoff tying MLE to regression.</p></li>
+<li><p><strong>Baseline</strong> = predict the mean; error = <strong>SST</strong> (sum of squared totals).</p></li>
+<li><p>The linear model <code class="docutils literal notranslate"><span class="pre">y</span> <span class="pre">=</span> <span class="pre">β₀</span> <span class="pre">+</span> <span class="pre">β₁x</span> <span class="pre">+</span> <span class="pre">ε</span></code> hinges on the <strong>error term</strong> <code class="docutils literal notranslate"><span class="pre">ε</span> <span class="pre">~</span> <span class="pre">Normal(0,</span> <span class="pre">σ)</span></code>.</p></li>
+<li><p>Hope: fitted σ &lt; the baseline SD (2171).</p></li>
+<li><p>Squaring errors penalizes big misses.</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Linear regression with Corn.csv (Pt. 2)</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">mle2</span></code> solves <strong>β₀, β₁, σ simultaneously</strong> by maximizing the likelihood of the errors.</p></li>
+<li><p>Result: σ = 1940 &lt; 2171, slope = 51.5 (marginal effect of nitrate).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">lm()</span></code> reproduces the same coefficients — a sanity check.</p></li>
+<li><p><strong>R² = 1 − SSE/SST = 0.20</strong>: nitrate explains ~20% of yield.</p></li>
+<li><p>p-value tests H₀: coefficient = 0.</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Closing Thoughts on Linear Regression (Pt. 3)</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">bbmle</span></code> tips: start coefficients at 0, σ at the target’s SD; add bounds; try multiple starts (local optima).</p></li>
+<li><p>In practice use <strong><code class="docutils literal notranslate"><span class="pre">lm</span></code>/<code class="docutils literal notranslate"><span class="pre">glm</span></code></strong>, not <code class="docutils literal notranslate"><span class="pre">bbmle</span></code>.</p></li>
+<li><p>Four LM assumptions: normal target, <strong>homoscedastic</strong> errors, errors uncorrelated with X, independent obs.</p></li>
+<li><p>Biggest one: make the <strong>target roughly normal</strong> before fitting.</p></li>
+<li><p>Assumptions are what make <strong>inference</strong> (not just prediction) valid.</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Regression with binary outcomes with Admit.csv (Pt. 1)</p>
+<ul class="simple">
+<li><p>Binary target (<code class="docutils literal notranslate"><span class="pre">admit</span></code>) ⇒ <strong>logistic regression</strong> (a GLM).</p></li>
+<li><p><strong>Logistic transform</strong> <code class="docutils literal notranslate"><span class="pre">π</span> <span class="pre">=</span> <span class="pre">eˣ/(1+eˣ)</span></code> keeps the model linear in log-odds.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mle2</span></code> estimates β’s; <strong>stars</strong> flag significance (GRE wasn’t significant).</p></li>
+<li><p>Baseline likelihood uses <code class="docutils literal notranslate"><span class="pre">π^(#1s)·(1−π)^(#0s)</span></code>; track <strong>−2 log-likelihood</strong>.</p></li>
+<li><p>Higher GPA ↑ admission; higher (worse) class rank ↓ it.</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Understanding logistic regression and model fit (Pt. 2)</p>
+<ul class="simple">
+<li><p><strong>Odds</strong> = π/(1−π); log-odds is the linear quantity.</p></li>
+<li><p>Interpret coefficients via <code class="docutils literal notranslate"><span class="pre">e^coef</span></code>: +1 GPA ⇒ <strong>2.41×</strong> the odds of admission.</p></li>
+<li><p>Drop insignificant predictors (GRE) and refit.</p></li>
+<li><p><strong>AIC/BIC</strong> from −2 log-likelihood penalize extra parameters (and samples).</p></li>
+<li><p>Smaller AIC/BIC + similar fit ⇒ choose the simpler model.</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Regression for count outcomes with student.csv</p>
+<ul class="simple">
+<li><p>Count target (<strong>days absent</strong>) ⇒ <strong>Poisson regression</strong>.</p></li>
+<li><p>Model <code class="docutils literal notranslate"><span class="pre">log</span> <span class="pre">λ</span></code> as linear, then <strong>exponentiate</strong> coefficients.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">e^-0.6</span> <span class="pre">=</span> <span class="pre">0.45×</span></code> fewer absences as progress rises (multiplicative).</p></li>
+<li><p>All predictors significant; ignore/interpret the intercept loosely.</p></li>
+<li><p>Compare with −2 log-likelihood / AIC / BIC (meaningful only vs another model).</p></li>
+</ul>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="module-3-hypothesis-testing.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Chapter 3 — Hypothesis Testing</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="module-5-regression.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Chapter 5 — Regression</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#likelihood-vs-probability">4.1 Likelihood vs. probability</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-likelihood-function-and-log-likelihood">4.2 The likelihood function and log-likelihood</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#three-ways-to-optimize">4.3 Three ways to optimize</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#over-dispersion-and-the-zero-inflated-poisson">4.4 Over-dispersion and the zero-inflated Poisson</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#from-mle-to-regression-the-linear-model">4.5 From MLE to regression — the linear model</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generalized-linear-models-logistic-poisson-regression">4.6 Generalized linear models: logistic &amp; Poisson regression</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#confidence-intervals-by-bootstrap">4.7 Confidence intervals by bootstrap</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#wrap-up">Wrap-up</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-key-points">📌 Lecture key points</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Dr. Dave Wanik · University of Connecticut (OPIM 5603)
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

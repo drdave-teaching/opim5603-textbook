@@ -1,0 +1,709 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Chapter 2 — Probability Distributions &#8212; Statistics in Business Analytics</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=cb00a2e8" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=b8b12719"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"]]}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'module-2-probability-distributions';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Chapter 3 — Hypothesis Testing" href="module-3-hypothesis-testing.html" />
+    <link rel="prev" title="Chapter 1 — Describing Data with R" href="module-1-descriptive-statistics.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+<aside class="bd-header-announcement" aria-label="Announcement">
+  <div class="bd-header-announcement__content">📊 <strong>OPIM 5603 · Statistics in Business Analytics</strong> — draft course companion (work in progress)</div>
+</aside>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Statistics in Business Analytics</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="module-1-descriptive-statistics.html">Chapter 1 — Describing Data with R</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Chapter 2 — Probability Distributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module-3-hypothesis-testing.html">Chapter 3 — Hypothesis Testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module-4-maximum-likelihood-estimation.html">Chapter 4 — Maximum Likelihood Estimation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module-5-regression.html">Chapter 5 — Regression</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/module-2-probability-distributions.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Chapter 2 — Probability Distributions</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#discrete-probability-distributions">2.1 Discrete probability distributions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#continuous-probability-distributions">2.2 Continuous probability distributions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sampling-the-central-limit-theorem-confidence-intervals">2.3 Sampling, the Central Limit Theorem &amp; confidence intervals</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#wrap-up">Wrap-up</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-key-points">📌 Lecture key points</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="chapter-2-probability-distributions">
+<h1>Chapter 2 — Probability Distributions<a class="headerlink" href="#chapter-2-probability-distributions" title="Link to this heading">#</a></h1>
+<div class="seealso dropdown admonition">
+<p class="admonition-title">🔗 Notebooks for this chapter</p>
+<p>Open in Colab and <strong>Runtime → Run all</strong> (R notebooks).</p>
+<ul class="simple">
+<li><p><strong>Discrete Distributions</strong>   <a class="reference external" href="https://colab.research.google.com/github/drdave-teaching/OPIM5603-notebooks/blob/main/Module2/Discrete_Distributions.ipynb"><img alt="Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a>   <a class="reference external" href="https://github.com/drdave-teaching/OPIM5603-notebooks/blob/main/Module2/Discrete_Distributions.ipynb">GitHub</a></p></li>
+<li><p><strong>Continuous Distributions</strong>   <a class="reference external" href="https://colab.research.google.com/github/drdave-teaching/OPIM5603-notebooks/blob/main/Module2/Continuous_Distributions.ipynb"><img alt="Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a>   <a class="reference external" href="https://github.com/drdave-teaching/OPIM5603-notebooks/blob/main/Module2/Continuous_Distributions.ipynb">GitHub</a></p></li>
+<li><p><strong>Sampling Methods and CLT</strong>   <a class="reference external" href="https://colab.research.google.com/github/drdave-teaching/OPIM5603-notebooks/blob/main/Module2/Sampling_Methods_and_CLT.ipynb"><img alt="Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a>   <a class="reference external" href="https://github.com/drdave-teaching/OPIM5603-notebooks/blob/main/Module2/Sampling_Methods_and_CLT.ipynb">GitHub</a></p></li>
+<li><p><strong>Estimation and Confidence Intervals</strong>   <a class="reference external" href="https://colab.research.google.com/github/drdave-teaching/OPIM5603-notebooks/blob/main/Module2/Estimation_and_Confidence_Intervals.ipynb"><img alt="Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a>   <a class="reference external" href="https://github.com/drdave-teaching/OPIM5603-notebooks/blob/main/Module2/Estimation_and_Confidence_Intervals.ipynb">GitHub</a></p></li>
+<li><p><strong>Cheat Sheet — pbinom()</strong>   <a class="reference external" href="https://colab.research.google.com/github/drdave-teaching/OPIM5603-notebooks/blob/main/Module2/CheatSheet_pbinom.ipynb"><img alt="Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a>   <a class="reference external" href="https://github.com/drdave-teaching/OPIM5603-notebooks/blob/main/Module2/CheatSheet_pbinom.ipynb">GitHub</a></p></li>
+<li><p><strong>Cheat Sheet — t.test() for CIs</strong>   <a class="reference external" href="https://colab.research.google.com/github/drdave-teaching/OPIM5603-notebooks/blob/main/Module2/CheatSheet_ttest_for_Confidence_Intervals.ipynb"><img alt="Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a>   <a class="reference external" href="https://github.com/drdave-teaching/OPIM5603-notebooks/blob/main/Module2/CheatSheet_ttest_for_Confidence_Intervals.ipynb">GitHub</a></p></li>
+</ul>
+</div>
+<p>Probability distributions are how we describe the way data <em>behaves</em>. This chapter builds one toolkit you’ll reuse everywhere: the four R functions <strong>d / p / q / r</strong>, applied first to <strong>discrete</strong> distributions (binomial, Poisson), then to <strong>continuous</strong> ones (uniform, normal, exponential). From there we reach the keystone idea of inferential statistics — the <strong>Central Limit Theorem</strong> — and turn it into <strong>confidence intervals</strong> that put honest uncertainty around an estimate.</p>
+<div class="note admonition">
+<p class="admonition-title">Your four favorite letters: d, p, q, r</p>
+<p>Every distribution in R shares four functions. <strong>d</strong> = <em>density</em> (the bar height for a discrete value; a likelihood for a continuous one). <strong>p</strong> = <em>percentile/probability</em> (cumulative — sum from the left up to a value). <strong>q</strong> = <em>quantile</em> (the inverse of p — “what value sits at this percentile?”). <strong>r</strong> = <em>random</em> draws. Learn them once on the binomial (<code class="docutils literal notranslate"><span class="pre">dbinom</span></code>/<code class="docutils literal notranslate"><span class="pre">pbinom</span></code>/<code class="docutils literal notranslate"><span class="pre">qbinom</span></code>) and they transfer to every other distribution.</p>
+</div>
+<section id="discrete-probability-distributions">
+<h2>2.1 Discrete probability distributions<a class="headerlink" href="#discrete-probability-distributions" title="Link to this heading">#</a></h2>
+<p>Discrete distributions describe <strong>counts</strong> — heads in 10 coin flips, defects per batch. Build intuition by simulation first: <code class="docutils literal notranslate"><span class="pre">sample()</span></code> flips a coin or rolls a die, and a <strong>Monte Carlo</strong> loop turns many trials into an empirical probability distribution.</p>
+<p>Given any discrete distribution, two summaries matter:</p>
+<ul class="simple">
+<li><p><strong>Mean</strong> = Σ (value × probability)</p></li>
+<li><p><strong>Variance</strong> = Σ (value − mean)² × probability</p></li>
+</ul>
+<p>The <strong>binomial</strong> counts successes in <em>n</em> independent trials (success probability π): <code class="docutils literal notranslate"><span class="pre">dbinom</span></code> for an exact count, <code class="docutils literal notranslate"><span class="pre">pbinom</span></code> for “k or fewer,” <code class="docutils literal notranslate"><span class="pre">qbinom</span></code> for the inverse. Use <strong>complements</strong> (<code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">-</span> <span class="pre">pbinom(...)</span></code>, or <code class="docutils literal notranslate"><span class="pre">lower.tail</span> <span class="pre">=</span> <span class="pre">FALSE</span></code>) for “more than,” and check a <code class="docutils literal notranslate"><span class="pre">qbinom</span></code> answer by feeding it back through <code class="docutils literal notranslate"><span class="pre">pbinom</span></code>. The <strong>Poisson</strong> counts events per unit of time or area with rate λ; the trick is <strong>rescaling λ</strong> to the units in the question (e.g., golf balls landing in the yard per <em>afternoon</em> vs. per <em>hour</em>).</p>
+</section>
+<section id="continuous-probability-distributions">
+<h2>2.2 Continuous probability distributions<a class="headerlink" href="#continuous-probability-distributions" title="Link to this heading">#</a></h2>
+<p>Continuous variables take any value in a range, so the probability of an <em>exact</em> point is zero — we always work with <strong>ranges</strong>.</p>
+<div class="warning admonition">
+<p class="admonition-title">dnorm is a likelihood, not a probability</p>
+<p>For continuous distributions you cannot read a probability off a single point — <code class="docutils literal notranslate"><span class="pre">dnorm(3,</span> <span class="pre">...)</span></code> returns a <em>likelihood</em>, which is undefined as a probability. Always ask for a <strong>range</strong>: <code class="docutils literal notranslate"><span class="pre">pnorm(3,</span> <span class="pre">...)</span></code> (”≤ 3”), or a difference of two <code class="docutils literal notranslate"><span class="pre">pnorm</span></code> calls for an interval.</p>
+</div>
+<p><strong>Uniform (the “rectangle”).</strong> Parameterized by min <code class="docutils literal notranslate"><span class="pre">a</span></code> and max <code class="docutils literal notranslate"><span class="pre">b</span></code>. The density is constant — <code class="docutils literal notranslate"><span class="pre">1/(b</span> <span class="pre">-</span> <span class="pre">a)</span></code> — so every interval of equal width is equally likely. Mean = (a + b)/2 and SD = √((b − a)² / 12). The bus-stop example (a bus every 30 minutes, students arriving at random) is pure uniform: <code class="docutils literal notranslate"><span class="pre">punif</span></code> gives “wait ≤ 25 min,” its complement gives “wait &gt; 25 min,” and a difference of two <code class="docutils literal notranslate"><span class="pre">punif</span></code> calls gives “wait between 10 and 15.”</p>
+<p><strong>Normal.</strong> Parameterized by mean μ and SD σ: bell-shaped, symmetric, with mean = median = mode and tails that are asymptotic (approach but never touch zero). Same μ with different σ “fans” the curve; same σ with different μ slides the peak. <code class="docutils literal notranslate"><span class="pre">pnorm</span></code>/<code class="docutils literal notranslate"><span class="pre">qnorm</span></code> answer probability and quantile questions, and a Monte Carlo simulation lets you <em>eyeball-check</em> the math — and rediscover that ~68% of the mass sits within ±1 SD.</p>
+<p><strong>Standard normal &amp; z-scores.</strong> Convert any normal to the standard normal with <code class="docutils literal notranslate"><span class="pre">z</span> <span class="pre">=</span> <span class="pre">(x</span> <span class="pre">−</span> <span class="pre">μ)</span> <span class="pre">/</span> <span class="pre">σ</span></code> — literally “how many SDs from the mean.” It makes plots intuitive (the x-axis becomes −3…+3) and lets you reuse <code class="docutils literal notranslate"><span class="pre">pnorm</span></code>/<code class="docutils literal notranslate"><span class="pre">qnorm</span></code> with their defaults (mean 0, sd 1). The General Mills cereal-box weight example walks through converting limits to z and shading the region.</p>
+<p><strong>Empirical rule &amp; exponential.</strong> On a normal curve the empirical rule is exact-ish: <strong>68 / 95 / 99.7%</strong> within ±1 / 2 / 3 SD. The <strong>exponential</strong> distribution is the continuous cousin of the Poisson — time-to-event from 0 → ∞ — using <strong>rate = 1/λ</strong> where λ is the mean (supermarket checkout time, power-supply time-to-failure, and the slightly evil warranty-design example).</p>
+</section>
+<section id="sampling-the-central-limit-theorem-confidence-intervals">
+<h2>2.3 Sampling, the Central Limit Theorem &amp; confidence intervals<a class="headerlink" href="#sampling-the-central-limit-theorem-confidence-intervals" title="Link to this heading">#</a></h2>
+<p>We sample because reaching a whole population is expensive or impossible (you can’t poll every voter or count every blood cell). A <strong>simple random sample</strong> gives every element an equal chance; watch the <code class="docutils literal notranslate"><span class="pre">replace</span> <span class="pre">=</span></code> argument (with vs. without replacement changes everything). <strong>Sampling error</strong> is just population mean − sample mean for a given draw.</p>
+<p>Here’s the keystone experiment (the <code class="docutils literal notranslate"><span class="pre">women</span></code> dataset): draw <strong>10,000 samples of size 5</strong>, keep each sample’s <em>mean</em>, and plot those 10,000 means.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">mean_dist</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">replicate</span><span class="p">(</span><span class="m">10000</span><span class="p">,</span><span class="w"> </span><span class="nf">mean</span><span class="p">(</span><span class="nf">sample</span><span class="p">(</span><span class="n">women</span><span class="o">$</span><span class="n">weight</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">5</span><span class="p">,</span><span class="w"> </span><span class="n">replace</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">)))</span>
+<span class="nf">hist</span><span class="p">(</span><span class="n">mean_dist</span><span class="p">)</span>
+<span class="nf">abline</span><span class="p">(</span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">mean</span><span class="p">(</span><span class="n">women</span><span class="o">$</span><span class="n">weight</span><span class="p">),</span><span class="w"> </span><span class="n">col</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;blue&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">lwd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">3</span><span class="p">)</span><span class="w">            </span><span class="c1"># population mean</span>
+<span class="nf">abline</span><span class="p">(</span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">mean</span><span class="p">(</span><span class="n">mean_dist</span><span class="p">),</span><span class="w">    </span><span class="n">col</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;red&quot;</span><span class="p">,</span><span class="w">  </span><span class="n">lwd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">3</span><span class="p">,</span><span class="w"> </span><span class="n">lty</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">2</span><span class="p">)</span><span class="w">   </span><span class="c1"># mean of means</span>
+</pre></div>
+</div>
+<p>Two things pop out: the <strong>sampling distribution of the mean is normal</strong>, and the <strong>mean of means lands right on the population mean</strong>. That’s the <strong>Central Limit Theorem</strong> — and it holds <em>for any parent distribution</em> (the notebook proves it on uniform, exponential, and normal parents). The spread of that sampling distribution is the <strong>standard error</strong>, <code class="docutils literal notranslate"><span class="pre">σ/√n</span></code>, which shrinks as the sample grows.</p>
+<div class="tip admonition">
+<p class="admonition-title">n is the only lever you control</p>
+<p>You can’t change the population mean or σ — they’re fixed by reality. The one knob you own is <strong>n</strong>. Because the standard error is σ/√n, collecting more data is the <em>only</em> way to tighten your estimate. And note: a <strong>standard error is not a standard deviation</strong> — it’s the SD <em>of the sampling distribution of the mean</em>.</p>
+</div>
+<p>A <strong>confidence interval</strong> marries a point estimate to that uncertainty. When σ is <strong>known</strong>:</p>
+<div class="math notranslate nohighlight">
+\[\bar{x} \pm z \cdot \frac{\sigma}{\sqrt{n}}\]</div>
+<p>with <code class="docutils literal notranslate"><span class="pre">z</span> <span class="pre">=</span> <span class="pre">1.96</span></code> for 95% and <code class="docutils literal notranslate"><span class="pre">2.58</span></code> for 99% (get any z from <code class="docutils literal notranslate"><span class="pre">qnorm</span></code>). When σ is <strong>unknown</strong> (almost always), use the sample SD <code class="docutils literal notranslate"><span class="pre">s</span></code> and the <strong>t distribution</strong>, parameterized by <strong>degrees of freedom = n − 1</strong>:</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">z95</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">qnorm</span><span class="p">(</span><span class="m">0.975</span><span class="p">)</span><span class="w">              </span><span class="c1"># 1.96  (sigma known)</span>
+<span class="n">t95</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">qt</span><span class="p">(</span><span class="m">0.975</span><span class="p">,</span><span class="w"> </span><span class="n">df</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="m">1</span><span class="p">)</span><span class="w">     </span><span class="c1"># bigger for small n — the penalty</span>
+<span class="n">ci</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">xbar</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">-1</span><span class="p">,</span><span class="w"> </span><span class="m">1</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">t95</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nf">sqrt</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The t value is a <strong>penalty for small samples</strong> (more uncertainty when you don’t know σ), and it <strong>converges to z</strong> as n grows — so for large samples the two are interchangeable. For <strong>proportions</strong> there’s no SD; use <code class="docutils literal notranslate"><span class="pre">p̂</span> <span class="pre">±</span> <span class="pre">z·√(p̂(1−p̂)/n)</span></code> after checking <code class="docutils literal notranslate"><span class="pre">n·p̂</span> <span class="pre">≥</span> <span class="pre">5</span></code> and <code class="docutils literal notranslate"><span class="pre">n·(1−p̂)</span> <span class="pre">≥</span> <span class="pre">5</span></code> (the union-merger example). Finally, you can <strong>plan sample size</strong>: rearrange the error formula to <code class="docutils literal notranslate"><span class="pre">n</span> <span class="pre">=</span> <span class="pre">(z·σ</span> <span class="pre">/</span> <span class="pre">E)²</span></code> for a mean (or the proportion analog, using 0.5 when p is unknown) — a tighter margin or higher confidence costs you more observations.</p>
+</section>
+<section id="wrap-up">
+<h2>Wrap-up<a class="headerlink" href="#wrap-up" title="Link to this heading">#</a></h2>
+<div class="tip admonition">
+<p class="admonition-title">Key takeaways</p>
+<ul class="simple">
+<li><p><strong>d / p / q / r</strong> work for every distribution — learn them on the binomial, reuse everywhere; use <strong>complements</strong> and check <code class="docutils literal notranslate"><span class="pre">q</span></code> with <code class="docutils literal notranslate"><span class="pre">p</span></code>.</p></li>
+<li><p><strong>Discrete</strong> (binomial, Poisson): mean = Σ value·prob, variance = Σ (value−mean)²·prob; rescale Poisson λ to the right units.</p></li>
+<li><p><strong>Continuous</strong>: probability is over <strong>ranges</strong> (<code class="docutils literal notranslate"><span class="pre">dnorm</span></code> is a likelihood). Uniform = rectangle; normal = μ, σ; convert to <strong>z-scores</strong> for the standard normal; exponential uses <strong>rate 1/λ</strong>.</p></li>
+<li><p><strong>CLT</strong>: the sampling distribution of the mean is <strong>normal</strong> for any parent, and the <strong>mean of means ≈ the population mean</strong>; spread = <strong>standard error σ/√n</strong>.</p></li>
+<li><p><strong>Confidence intervals</strong>: <code class="docutils literal notranslate"><span class="pre">x̄</span> <span class="pre">±</span> <span class="pre">z·σ/√n</span></code> (σ known) or the <strong>t</strong> version with <strong>df = n−1</strong> (σ unknown); proportions use <code class="docutils literal notranslate"><span class="pre">p̂</span> <span class="pre">±</span> <span class="pre">z·√(p̂(1−p̂)/n)</span></code>.</p></li>
+<li><p>You only control <strong>n</strong> — bigger samples shrink the interval; you can solve for the <strong>n</strong> a target margin/confidence requires.</p></li>
+</ul>
+</div>
+</section>
+<hr class="docutils" />
+<section id="lecture-key-points">
+<h2>📌 Lecture key points<a class="headerlink" href="#lecture-key-points" title="Link to this heading">#</a></h2>
+<p><em>Distilled takeaways from the video lectures behind this chapter — click each to expand.</em></p>
+<div class="note dropdown admonition">
+<p class="admonition-title">Sourcing note</p>
+<p>The seven <strong>Module 2.1 (discrete)</strong> cards and <strong>“Introduction to Continuous Variables”</strong> are drawn from Dr. Wanik’s <code class="docutils literal notranslate"><span class="pre">Discrete</span> <span class="pre">Distributions</span></code> and <code class="docutils literal notranslate"><span class="pre">Continuous</span> <span class="pre">Distributions</span></code> course notebooks and video notes — those lectures aren’t in the captioned video set, so unlike the rest of the book they’re not distilled from a spoken transcript.</p>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Introduction to discrete distributions (Pt. 1)</p>
+<ul class="simple">
+<li><p>A random variable’s outcome is uncertain; probability is always in [0, 1].</p></li>
+<li><p>A <strong>probability distribution</strong> lists every outcome and its probability (they sum to 1 — mutually exclusive, collectively exhaustive).</p></li>
+<li><p>Find a probability by counting: favorable outcomes / total outcomes (coin = 1/2, die = 1/6).</p></li>
+<li><p>Simulate draws with <strong><code class="docutils literal notranslate"><span class="pre">sample(x,</span> <span class="pre">size,</span> <span class="pre">replace</span> <span class="pre">=</span> <span class="pre">TRUE,</span> <span class="pre">prob</span> <span class="pre">=</span> <span class="pre">)</span></code></strong>.</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Introduction to discrete distributions (Pt. 2)</p>
+<ul class="simple">
+<li><p>Toss a coin 10 times and count heads → build the distribution by <strong>Monte Carlo</strong>: wrap the draw in a function and <strong><code class="docutils literal notranslate"><span class="pre">replicate(10000,</span> <span class="pre">f1())</span></code></strong>.</p></li>
+<li><p>Summarize with <strong><code class="docutils literal notranslate"><span class="pre">table()</span></code></strong> / <strong><code class="docutils literal notranslate"><span class="pre">prop.table()</span></code></strong> and visualize with <strong><code class="docutils literal notranslate"><span class="pre">barplot()</span></code></strong>.</p></li>
+<li><p>Answer “≤ 3 heads” or “an even number of heads” by <strong>summing</strong> the relevant probabilities.</p></li>
+<li><p>Works for weighted coins (e.g., success prob 0.8) and any number of trials.</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Mean and Variance of a Discrete Distribution</p>
+<ul class="simple">
+<li><p><strong>Mean</strong> μ = Σ (value × probability); <strong>variance</strong> σ² = Σ (value − μ)² × probability.</p></li>
+<li><p>Greek letters (μ, σ) because they describe the whole distribution/population.</p></li>
+<li><p>Worked “selling cars” example builds the table column by column in R.</p></li>
+<li><p>Don’t memorize PMFs — but <em>do</em> memorize mean and variance.</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Binomial Distribution (Pt. 1 — d is for density)</p>
+<ul class="simple">
+<li><p>Binomial = successes in <em>n</em> independent trials with success probability π.</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">dbinom(x,</span> <span class="pre">size,</span> <span class="pre">prob)</span></code></strong> = probability of <strong>exactly</strong> x successes (“flights late”: <code class="docutils literal notranslate"><span class="pre">dbinom(1,</span> <span class="pre">size=5,</span> <span class="pre">prob=0.2)</span></code>).</p></li>
+<li><p>“d” = density = the bar height.</p></li>
+<li><p>Sum individual <code class="docutils literal notranslate"><span class="pre">dbinom</span></code> values to cover a set of outcomes.</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Binomial Distribution (Pt. 2 — p is percentile, q is quantile)</p>
+<ul class="simple">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">pbinom(q,</span> <span class="pre">size,</span> <span class="pre">prob)</span></code></strong> = cumulative (≤ q); for “more than,” use the <strong>complement</strong> <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">-</span> <span class="pre">pbinom(...)</span></code> or <code class="docutils literal notranslate"><span class="pre">lower.tail</span> <span class="pre">=</span> <span class="pre">FALSE</span></code>.</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">qbinom(p,</span> <span class="pre">size,</span> <span class="pre">prob)</span></code></strong> = the value at a given percentile (inverse of <code class="docutils literal notranslate"><span class="pre">pbinom</span></code>).</p></li>
+<li><p>Check a <code class="docutils literal notranslate"><span class="pre">qbinom</span></code> answer by feeding it back through <code class="docutils literal notranslate"><span class="pre">pbinom</span></code>.</p></li>
+<li><p>Complement ≠ compliment! d/p/q now complete for the binomial.</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Poisson Distribution (D, P, Q for count data)</p>
+<ul class="simple">
+<li><p>Poisson = counts per unit time/area, parameter λ (mean = variance = λ).</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">dpois(x,</span> <span class="pre">lambda)</span></code></strong>, <strong><code class="docutils literal notranslate"><span class="pre">ppois(q,</span> <span class="pre">lambda)</span></code></strong> (+ complement / <code class="docutils literal notranslate"><span class="pre">lower.tail=FALSE</span></code>), <strong><code class="docutils literal notranslate"><span class="pre">qpois(p,</span> <span class="pre">lambda)</span></code></strong>.</p></li>
+<li><p><strong>Rescale λ</strong> to the units in the question; check <code class="docutils literal notranslate"><span class="pre">qpois</span></code> with <code class="docutils literal notranslate"><span class="pre">ppois</span></code>.</p></li>
+<li><p>Same d/p/q workflow as the binomial.</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Wrapping Up</p>
+<ul class="simple">
+<li><p>Quick recap of discrete distributions.</p></li>
+<li><p>Preview of where the course heads next (continuous distributions).</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Introduction to Continuous Variables</p>
+<ul class="simple">
+<li><p>Set up the environment for continuous distributions.</p></li>
+<li><p>Contrast <strong>mean and variance</strong> for a continuous vs. a discrete distribution.</p></li>
+<li><p>Probability now lives over <strong>ranges</strong>, not single points (a point’s density is a likelihood, not a probability).</p></li>
+<li><p>The <strong>d / p / q / r</strong> functions carry straight over; sets up uniform / normal / exponential.</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Uniform Distribution</p>
+<ul class="simple">
+<li><p>The “rectangle” distribution, parameterized by min <strong>a</strong> and max <strong>b</strong>; density = 1/(b−a).</p></li>
+<li><p>Mean = (a+b)/2; SD = √((b−a)²/12).</p></li>
+<li><p>Bus-stop example; <code class="docutils literal notranslate"><span class="pre">punif</span></code> for tails, complement for the upper tail, difference for a middle range.</p></li>
+<li><p>Every equal-width interval is equally likely.</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Normal Distribution</p>
+<ul class="simple">
+<li><p>Parameterized by μ and σ; bell-shaped, symmetric, mean = median = mode, asymptotic tails.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pnorm</span></code>/<code class="docutils literal notranslate"><span class="pre">qnorm</span></code> for probabilities and quantiles; verify with a Monte Carlo simulation.</p></li>
+<li><p>Same μ / different σ “fans”; same σ / different μ shifts the peak.</p></li>
+<li><p>~68% within ±1 SD ties back to the empirical rule.</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">A Quick Refresh and Intro to the Standard Normal</p>
+<ul class="simple">
+<li><p>Continuous probability is over a range; <code class="docutils literal notranslate"><span class="pre">dnorm</span></code> at a point is a <strong>likelihood</strong>, technically undefined.</p></li>
+<li><p><strong>z-score</strong> = (x − μ)/σ = how many SDs from the mean.</p></li>
+<li><p>Any normal converts to the <strong>standard normal</strong> (mean 0, sd 1) — <code class="docutils literal notranslate"><span class="pre">pnorm</span></code>/<code class="docutils literal notranslate"><span class="pre">qnorm</span></code> defaults.</p></li>
+<li><p>Cereal-box example: convert limits to z, then shade the region.</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">The Empirical Rule and Exponential Distribution</p>
+<ul class="simple">
+<li><p>Empirical rule (normal): <strong>68 / 95 / 99.7%</strong> within ±1 / 2 / 3 SD; matches <code class="docutils literal notranslate"><span class="pre">pnorm</span></code> differences.</p></li>
+<li><p><strong>Exponential</strong> = continuous time-to-event (0 → ∞), the continuous cousin of the Poisson.</p></li>
+<li><p>Use <strong>rate = 1/λ</strong> where λ is the mean; <code class="docutils literal notranslate"><span class="pre">pexp</span></code> for probabilities.</p></li>
+<li><p>Checkout-time and warranty-design examples.</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Sampling Methods and CLT (Pt. 1)</p>
+<ul class="simple">
+<li><p>Population vs sample; parameters (Greek) estimated by statistics (Roman).</p></li>
+<li><p>We sample because populations are costly or infinite; use a <strong>simple random sample</strong>.</p></li>
+<li><p>Watch <code class="docutils literal notranslate"><span class="pre">replace</span> <span class="pre">=</span></code> (with vs. without replacement); <strong>sampling error</strong> = population − sample mean.</p></li>
+<li><p>10,000 samples of size 5 → the <strong>mean of means ≈ the population mean</strong>.</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Sampling Methods and CLT (Pt. 2)</p>
+<ul class="simple">
+<li><p>Those 10,000 sample means form a <strong>sampling distribution of the mean</strong> — and it’s normal.</p></li>
+<li><p><strong>Standard error</strong> = σ/√n = the SD of that sampling distribution (≠ a plain SD).</p></li>
+<li><p>Bigger n ⇒ smaller standard error ⇒ tighter estimate.</p></li>
+<li><p>The bridge into inferential statistics.</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Sampling Methods and CLT (Pt. 3)</p>
+<ul class="simple">
+<li><p>The <strong>CLT holds for ANY parent</strong> — demonstrated on uniform, exponential, and normal.</p></li>
+<li><p>Even tiny samples (n = 2) start to look normal once you average many of them.</p></li>
+<li><p>Larger n tightens the spread (σ/√n) and centers on the population mean.</p></li>
+<li><p>The biggest takeaway: more data ⇒ less uncertainty.</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Estimation and Confidence Intervals (Pt. 1)</p>
+<ul class="simple">
+<li><p>Don’t just report a point estimate — wrap it in a <strong>confidence interval</strong>.</p></li>
+<li><p>The sample mean is the best estimate of the population mean.</p></li>
+<li><p><strong>Level of confidence</strong> (e.g., 95%); alpha = 1 − level.</p></li>
+<li><p>Two cases ahead: σ known (use z) vs σ unknown (use t — a “penalty shot”).</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Estimation and Confidence Intervals (Pt. 2)</p>
+<ul class="simple">
+<li><p>A CI is just <strong>center ± spread</strong> of the sample.</p></li>
+<li><p>σ known: <code class="docutils literal notranslate"><span class="pre">x̄</span> <span class="pre">±</span> <span class="pre">z·σ/√n</span></code>; <strong>z = 1.96</strong> (95%), <strong>2.58</strong> (99%) via <code class="docutils literal notranslate"><span class="pre">qnorm</span></code>.</p></li>
+<li><p>Standard error σ/√n shrinks with n ⇒ tighter interval.</p></li>
+<li><p>You control only n — collect more data to be more confident.</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Estimation and Confidence Intervals (Pt. 3)</p>
+<ul class="simple">
+<li><p>σ <strong>unknown</strong> ⇒ use the sample SD <code class="docutils literal notranslate"><span class="pre">s</span></code> and the <strong>t distribution</strong> (df = n − 1).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">qt()</span></code> gives a bigger multiplier than z for small n — the penalty.</p></li>
+<li><p>t <strong>converges to z</strong> as n grows (≈ identical by n ≈ 100+).</p></li>
+<li><p>Worked tire-tread example builds and interprets the interval.</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Estimation and Confidence Intervals (Pt. 4)</p>
+<ul class="simple">
+<li><p><strong>Proportions</strong>: <code class="docutils literal notranslate"><span class="pre">p̂</span> <span class="pre">±</span> <span class="pre">z·√(p̂(1−p̂)/n)</span></code> — no SD term; check <code class="docutils literal notranslate"><span class="pre">n·p̂</span> <span class="pre">≥</span> <span class="pre">5</span></code> and <code class="docutils literal notranslate"><span class="pre">n·(1−p̂)</span> <span class="pre">≥</span> <span class="pre">5</span></code>.</p></li>
+<li><p>Union-merger example interprets the interval against a threshold.</p></li>
+<li><p><strong>Sample-size planning</strong>: <code class="docutils literal notranslate"><span class="pre">n</span> <span class="pre">=</span> <span class="pre">(z·σ/E)²</span></code> for a mean; analog for proportions (use 0.5 when unknown).</p></li>
+<li><p>Tighter margin / higher confidence ⇒ more observations.</p></li>
+</ul>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="module-1-descriptive-statistics.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Chapter 1 — Describing Data with R</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="module-3-hypothesis-testing.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Chapter 3 — Hypothesis Testing</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#discrete-probability-distributions">2.1 Discrete probability distributions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#continuous-probability-distributions">2.2 Continuous probability distributions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sampling-the-central-limit-theorem-confidence-intervals">2.3 Sampling, the Central Limit Theorem &amp; confidence intervals</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#wrap-up">Wrap-up</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-key-points">📌 Lecture key points</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Dr. Dave Wanik · University of Connecticut (OPIM 5603)
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

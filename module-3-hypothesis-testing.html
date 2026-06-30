@@ -1,0 +1,670 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Chapter 3 — Hypothesis Testing &#8212; Statistics in Business Analytics</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=cb00a2e8" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=b8b12719"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'module-3-hypothesis-testing';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Chapter 4 — Maximum Likelihood Estimation" href="module-4-maximum-likelihood-estimation.html" />
+    <link rel="prev" title="Chapter 2 — Probability Distributions" href="module-2-probability-distributions.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+<aside class="bd-header-announcement" aria-label="Announcement">
+  <div class="bd-header-announcement__content">📊 <strong>OPIM 5603 · Statistics in Business Analytics</strong> — draft course companion (work in progress)</div>
+</aside>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Statistics in Business Analytics</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="module-1-descriptive-statistics.html">Chapter 1 — Describing Data with R</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module-2-probability-distributions.html">Chapter 2 — Probability Distributions</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Chapter 3 — Hypothesis Testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module-4-maximum-likelihood-estimation.html">Chapter 4 — Maximum Likelihood Estimation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module-5-regression.html">Chapter 5 — Regression</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/module-3-hypothesis-testing.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Chapter 3 — Hypothesis Testing</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-five-step-procedure">3.1 The five-step procedure</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#one-sample-tests-worked">3.2 One-sample tests, worked</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#two-sample-tests-the-big-idea">3.3 Two-sample tests: the big idea</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#two-sample-means-and-proportions">3.4 Two-sample means and proportions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#paired-dependent-samples">3.5 Paired (dependent) samples</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#wrap-up">Wrap-up</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-key-points">📌 Lecture key points</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="chapter-3-hypothesis-testing">
+<h1>Chapter 3 — Hypothesis Testing<a class="headerlink" href="#chapter-3-hypothesis-testing" title="Link to this heading">#</a></h1>
+<div class="seealso dropdown admonition">
+<p class="admonition-title">🔗 Notebooks for this chapter</p>
+<p>Open in Colab and <strong>Runtime → Run all</strong> (R notebooks).</p>
+<ul class="simple">
+<li><p><strong>One-Sample Tests (summarized)</strong>   <a class="reference external" href="https://colab.research.google.com/github/drdave-teaching/OPIM5603-notebooks/blob/main/Module3/One_Sample_Tests_summarized.ipynb"><img alt="Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a>   <a class="reference external" href="https://github.com/drdave-teaching/OPIM5603-notebooks/blob/main/Module3/One_Sample_Tests_summarized.ipynb">GitHub</a></p></li>
+<li><p><strong>Two-Sample Tests — Additional Problems</strong>   <a class="reference external" href="https://colab.research.google.com/github/drdave-teaching/OPIM5603-notebooks/blob/main/Module3/Two_Sample_Tests_Additional_Problems.ipynb"><img alt="Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a>   <a class="reference external" href="https://github.com/drdave-teaching/OPIM5603-notebooks/blob/main/Module3/Two_Sample_Tests_Additional_Problems.ipynb">GitHub</a></p></li>
+<li><p><strong>Cheat Sheet — Hypothesis Testing from Scratch</strong>   <a class="reference external" href="https://colab.research.google.com/github/drdave-teaching/OPIM5603-notebooks/blob/main/Module3/Cheat_Sheet_Hypothesis_Testing_from_Scratch.ipynb"><img alt="Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a>   <a class="reference external" href="https://github.com/drdave-teaching/OPIM5603-notebooks/blob/main/Module3/Cheat_Sheet_Hypothesis_Testing_from_Scratch.ipynb">GitHub</a></p></li>
+</ul>
+</div>
+<p>This is inferential statistics in action: we make a claim about a population, collect a sample, and decide whether the sample is <strong>extreme enough</strong> to overturn the claim. The whole chapter runs on one engine — the <strong>five-step procedure</strong> — applied first to <strong>one-sample</strong> tests (means and proportions) and then to <strong>two-sample</strong> tests, where each assumption we relax makes significance a little harder to declare.</p>
+<section id="the-five-step-procedure">
+<h2>3.1 The five-step procedure<a class="headerlink" href="#the-five-step-procedure" title="Link to this heading">#</a></h2>
+<p>Every test follows the same five steps:</p>
+<ol class="arabic simple">
+<li><p><strong>State the hypotheses.</strong> The <strong>null</strong> (H₀) is the status-quo claim — what the politician says — and always carries the equality (<code class="docutils literal notranslate"><span class="pre">=</span></code>, <code class="docutils literal notranslate"><span class="pre">≤</span></code>, <code class="docutils literal notranslate"><span class="pre">≥</span></code>). The <strong>alternative</strong> (H₁) is what you’re trying to prove with data.</p></li>
+<li><p><strong>Pick a significance level α</strong> — 0.10, 0.05, or 0.01 (medical work wants 0.01). α is your tolerance for rejecting a true null.</p></li>
+<li><p><strong>Choose the test statistic</strong> — <strong>z</strong> if the population σ is known, <strong>t</strong> if it isn’t.</p></li>
+<li><p><strong>Form the decision rule</strong> — find the <strong>critical value</strong> (<code class="docutils literal notranslate"><span class="pre">qnorm</span></code>/<code class="docutils literal notranslate"><span class="pre">qt</span></code>) that marks the rejection region.</p></li>
+<li><p><strong>Compute the statistic and decide</strong> — reject H₀, or “fail to reject” (never “accept”).</p></li>
+</ol>
+<p>A <strong>test statistic</strong> like <code class="docutils literal notranslate"><span class="pre">z</span> <span class="pre">=</span> <span class="pre">(x̄</span> <span class="pre">−</span> <span class="pre">μ)</span> <span class="pre">/</span> <span class="pre">(σ/√n)</span></code> measures how many standard errors your sample sits from the claimed mean. The <strong>p-value</strong> is the probability mass beyond it — <em>the chance of a sample this extreme if H₀ were true</em>. Two-tailed tests split α into both tails (so 95% confidence ⇒ critical values ±1.96); one-tailed tests pile all of α into the tail of interest, which makes rejection a bit easier.</p>
+<div class="tip admonition">
+<p class="admonition-title">Don’t memorize rejection rules — draw them</p>
+<p>Plot the distribution: the <strong>critical value</strong> is a red line (from <code class="docutils literal notranslate"><span class="pre">qnorm</span></code>/<code class="docutils literal notranslate"><span class="pre">qt</span></code>), the <strong>test statistic</strong> is a purple line, and the <strong>rejection region</strong> is the shaded tail(s). If the purple line lands in the shaded region, reject. This picture makes one- vs two-tailed tests and p-values obvious, and it beats memorizing inequalities.</p>
+</div>
+</section>
+<section id="one-sample-tests-worked">
+<h2>3.2 One-sample tests, worked<a class="headerlink" href="#one-sample-tests-worked" title="Link to this heading">#</a></h2>
+<p>The notebook walks every flavor with the same desk-manufacturing and claims examples:</p>
+<ul class="simple">
+<li><p><strong>Two-tailed, σ known</strong> — “is production <em>different</em> from 200?” Split α/2 into both tails; <code class="docutils literal notranslate"><span class="pre">z</span> <span class="pre">=</span> <span class="pre">(203.5</span> <span class="pre">−</span> <span class="pre">200)/(16/√50)</span> <span class="pre">=</span> <span class="pre">1.55</span></code> isn’t extreme enough → fail to reject.</p></li>
+<li><p><strong>Upper-tailed, σ known</strong> — “did production <em>increase</em>?” One tail, one critical value, and the <strong>p-value</strong> emerges cleanly as the mass to the right of the test statistic.</p></li>
+<li><p><strong>Lower-tailed, σ unknown → t</strong> — insurance claims now under $60? Use the sample SD and <code class="docutils literal notranslate"><span class="pre">qt(α,</span> <span class="pre">df</span> <span class="pre">=</span> <span class="pre">n</span> <span class="pre">−</span> <span class="pre">1)</span></code>; the t distribution’s fat tails make rejection harder.</p></li>
+<li><p><strong>Proportion</strong> — there’s no SD, so <code class="docutils literal notranslate"><span class="pre">z</span> <span class="pre">=</span> <span class="pre">(p̂</span> <span class="pre">−</span> <span class="pre">π₀)/√(π₀(1−π₀)/n)</span></code> (governor’s vote share); check <code class="docutils literal notranslate"><span class="pre">n·π</span> <span class="pre">≥</span> <span class="pre">5</span></code> and <code class="docutils literal notranslate"><span class="pre">n·(1−π)</span> <span class="pre">≥</span> <span class="pre">5</span></code> first.</p></li>
+</ul>
+</section>
+<section id="two-sample-tests-the-big-idea">
+<h2>3.3 Two-sample tests: the big idea<a class="headerlink" href="#two-sample-tests-the-big-idea" title="Link to this heading">#</a></h2>
+<p>Now we compare two <strong>subpopulations</strong> — plumbers vs. electricians, day vs. night shift — by looking at the <strong>difference of their means</strong> and asking whether it’s significantly different from zero. Three facts power every two-sample test:</p>
+<ul class="simple">
+<li><p>The <strong>difference of two normal distributions is itself normal</strong> (courtesy of the CLT).</p></li>
+<li><p><strong>Variance is additive</strong> — combine the uncertainty from both groups rather than picking one.</p></li>
+<li><p>Samples can be different sizes, and they’re either <strong>independent</strong> (two random groups) or <strong>dependent/paired</strong> (the same units measured twice).</p></li>
+</ul>
+</section>
+<section id="two-sample-means-and-proportions">
+<h2>3.4 Two-sample means and proportions<a class="headerlink" href="#two-sample-means-and-proportions" title="Link to this heading">#</a></h2>
+<p>We build up in difficulty, and the pattern is the point:</p>
+<ul class="simple">
+<li><p><strong>σ known → z</strong> (grocery checkout methods): <code class="docutils literal notranslate"><span class="pre">z</span> <span class="pre">=</span> <span class="pre">(x̄₁</span> <span class="pre">−</span> <span class="pre">x̄₂)/√(σ₁²/n₁</span> <span class="pre">+</span> <span class="pre">σ₂²/n₂)</span></code>.</p></li>
+<li><p><strong>Proportions → z with a pooled proportion</strong> <code class="docutils literal notranslate"><span class="pre">p_c</span></code> (perfume survey): pool successes across both samples for the standard error.</p></li>
+<li><p><strong>σ unknown, equal variance → t</strong> with a <strong>pooled SD <code class="docutils literal notranslate"><span class="pre">s_p</span></code></strong> and <code class="docutils literal notranslate"><span class="pre">df</span> <span class="pre">=</span> <span class="pre">n₁</span> <span class="pre">+</span> <span class="pre">n₂</span> <span class="pre">−</span> <span class="pre">2</span></code> (lawn-mower mounting times).</p></li>
+<li><p><strong>σ unknown, unequal variance → t</strong> with the <strong>Welch degrees of freedom</strong> (paper-towel absorbency) — compute the messy df formula and <strong>truncate it down</strong> (10.86 → 10) to stay conservative.</p></li>
+</ul>
+<div class="note admonition">
+<p class="admonition-title">Each relaxed assumption makes rejection harder</p>
+<p>The ladder z → t(equal variance) → t(unequal variance) adds uncertainty at every rung, so it takes a larger gap to declare significance. Knowing σ is the easy case; assuming <strong>unknown, unequal variance</strong> is the most conservative — and the safest when you really need to be sure two groups differ.</p>
+</div>
+</section>
+<section id="paired-dependent-samples">
+<h2>3.5 Paired (dependent) samples<a class="headerlink" href="#paired-dependent-samples" title="Link to this heading">#</a></h2>
+<p>When the <em>same</em> units are measured twice — weight before/after a drug, the same 10 houses appraised by two mortgage companies — use a <strong>paired t-test</strong> on the <strong>differences</strong>: <code class="docutils literal notranslate"><span class="pre">t</span> <span class="pre">=</span> <span class="pre">d̄</span> <span class="pre">/</span> <span class="pre">(s_d/√n)</span></code>, <code class="docutils literal notranslate"><span class="pre">df</span> <span class="pre">=</span> <span class="pre">n</span> <span class="pre">−</span> <span class="pre">1</span></code>. Pairing cancels the between-subject variation, which <strong>shrinks the denominator</strong> and makes significance <em>easier</em> to declare. The notebook proves it: on the same mortgage data, the <strong>paired</strong> test finds a real difference while an <strong>independent</strong> two-sample test (big pooled variance) cannot — so matching the test to the data design matters.</p>
+<div class="warning admonition">
+<p class="admonition-title">Statistical vs. substantive significance</p>
+<p>A test statistic is <code class="docutils literal notranslate"><span class="pre">difference</span> <span class="pre">/</span> <span class="pre">(spread/√n)</span></code>, so with a <strong>large enough n even a trivial difference becomes “significant.”</strong> The classic trap: a wine study where one group lives to 80.30 and the other to 80.31 — statistically significant, practically meaningless. Always look at the <strong>size of the effect (the delta)</strong>, not just the p-value.</p>
+</div>
+</section>
+<section id="wrap-up">
+<h2>Wrap-up<a class="headerlink" href="#wrap-up" title="Link to this heading">#</a></h2>
+<div class="tip admonition">
+<p class="admonition-title">Key takeaways</p>
+<ul class="simple">
+<li><p>The <strong>five steps</strong>: hypotheses (H₀ holds the equality) → α → test statistic → decision rule → decide (“fail to reject,” never “accept”).</p></li>
+<li><p><strong>z when σ is known, t (df = n − 1) when it isn’t</strong>; two-tailed splits α/2, one-tailed pools α in one tail.</p></li>
+<li><p>The <strong>p-value</strong> is the chance of a sample this extreme if H₀ is true — <em>draw</em> the critical (red) and test-statistic (purple) lines.</p></li>
+<li><p><strong>Two-sample</strong>: difference of normals is normal, <strong>variance is additive</strong>; ladder of difficulty z → pooled-t (equal var) → Welch-t (unequal var, truncate df).</p></li>
+<li><p><strong>Proportions</strong> use <code class="docutils literal notranslate"><span class="pre">p̂</span></code>/pooled <code class="docutils literal notranslate"><span class="pre">p_c</span></code> (no SD); check <code class="docutils literal notranslate"><span class="pre">n·π</span> <span class="pre">≥</span> <span class="pre">5</span></code> and <code class="docutils literal notranslate"><span class="pre">n·(1−π)</span> <span class="pre">≥</span> <span class="pre">5</span></code>.</p></li>
+<li><p><strong>Paired data</strong> → paired t-test on the differences (easier to detect a real effect); always weigh <strong>substantive vs statistical</strong> significance.</p></li>
+</ul>
+</div>
+</section>
+<hr class="docutils" />
+<section id="lecture-key-points">
+<h2>📌 Lecture key points<a class="headerlink" href="#lecture-key-points" title="Link to this heading">#</a></h2>
+<p><em>Distilled takeaways from the video lectures behind this chapter — click each to expand.</em></p>
+<div class="note dropdown admonition">
+<p class="admonition-title">The Five Steps of Hypothesis Testing</p>
+<ul class="simple">
+<li><p>Inferential stats: use a <strong>sample</strong> to test a claim about a <strong>population</strong>.</p></li>
+<li><p>Five steps: state H₀/H₁ → pick α → choose test statistic → decision rule → decide.</p></li>
+<li><p>H₀ holds the equality; <strong>p-value</strong> = chance of a sample this extreme if H₀ is true.</p></li>
+<li><p>z (σ known) vs t (σ unknown); one- vs two-tailed; “fail to reject,” never “accept.”</p></li>
+<li><p>Type I error ties to α; visualize the rejection region.</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Two-Tail Test: Pop. Std. Dev. Known</p>
+<ul class="simple">
+<li><p>Two-tailed ⇒ split α/2 into <strong>both</strong> tails; critical values ±z via <code class="docutils literal notranslate"><span class="pre">qnorm</span></code>.</p></li>
+<li><p>Desk example: <code class="docutils literal notranslate"><span class="pre">z</span> <span class="pre">=</span> <span class="pre">(203.5−200)/(16/√50)</span> <span class="pre">=</span> <span class="pre">1.55</span></code> → not extreme → fail to reject.</p></li>
+<li><p>Big population spread ⇒ need to be 2+ SE away to reject.</p></li>
+<li><p>Plot it: red critical lines, purple test statistic, shaded tails.</p></li>
+<li><p>A large σ makes small mean differences unconvincing.</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Upper-Tail Test: Pop. Std. Dev. Known</p>
+<ul class="simple">
+<li><p>One-tailed ⇒ one rejection region; critical value <code class="docutils literal notranslate"><span class="pre">z_α</span></code> via <code class="docutils literal notranslate"><span class="pre">qnorm</span></code> (easier to reject).</p></li>
+<li><p>The alternative points toward the rejection tail.</p></li>
+<li><p><strong>p-value</strong> emerges as the mass to the right of the test statistic (<code class="docutils literal notranslate"><span class="pre">lower.tail</span> <span class="pre">=</span> <span class="pre">FALSE</span></code>).</p></li>
+<li><p>If p &lt; α, reject; the analyst chooses α (0.10/0.05/0.01).</p></li>
+<li><p>Same z as the two-tail version — only the rule changes.</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Lower-Tail Test: Pop. Std. Dev. Unknown</p>
+<ul class="simple">
+<li><p>σ unknown ⇒ use sample SD and the <strong>t distribution</strong> (fat tails, harder to reject).</p></li>
+<li><p>Critical value via <strong><code class="docutils literal notranslate"><span class="pre">qt(α,</span> <span class="pre">df</span> <span class="pre">=</span> <span class="pre">n</span> <span class="pre">−</span> <span class="pre">1)</span></code></strong> — not <code class="docutils literal notranslate"><span class="pre">qnorm</span></code>.</p></li>
+<li><p>Insurance-claims example: t = −1.81 vs −2.485 → fail to reject at 0.01.</p></li>
+<li><p>The alternative (“less than 60”) signals a lower-tail test.</p></li>
+<li><p>Decision flips at looser α (0.05/0.10) — α is a real choice.</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Proportions (one-sample)</p>
+<ul class="simple">
+<li><p>Proportion <code class="docutils literal notranslate"><span class="pre">p</span> <span class="pre">=</span> <span class="pre">x/n</span></code>; no SD, so <code class="docutils literal notranslate"><span class="pre">z</span> <span class="pre">=</span> <span class="pre">(p̂</span> <span class="pre">−</span> <span class="pre">π₀)/√(π₀(1−π₀)/n)</span></code>.</p></li>
+<li><p>Requires count data, two outcomes, independent trials, <code class="docutils literal notranslate"><span class="pre">n·π</span> <span class="pre">≥</span> <span class="pre">5</span></code> and <code class="docutils literal notranslate"><span class="pre">n·(1−π)</span> <span class="pre">≥</span> <span class="pre">5</span></code>.</p></li>
+<li><p>Governor-vote example: p̂ = 0.775 vs claimed 0.80 → z = −2.8 → reject.</p></li>
+<li><p>Uses the normal approximation to the binomial.</p></li>
+<li><p>Same five-step logic, different statistic.</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">More Examples on Hypothesis Testing</p>
+<ul class="simple">
+<li><p>A grid of lower/upper/two-tail tests for means (z and t) and proportions.</p></li>
+<li><p>Light bulbs (z = −4.56, reject fast), cookies (upper-tail, reject), penguins (two-tail, borderline).</p></li>
+<li><p>Same example with t shifts the critical value out (fat tails) — harder to reject.</p></li>
+<li><p>How you frame one- vs two-tailed changes the conclusion.</p></li>
+<li><p>Reinforces drawing the picture over memorizing rules.</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Introduction to Two-Sample Tests of Hypothesis</p>
+<ul class="simple">
+<li><p>Compare two <strong>subpopulations</strong> via the <strong>difference of means</strong> (is it ≠ 0?).</p></li>
+<li><p>Samples can be different sizes; <strong>variance is additive</strong>.</p></li>
+<li><p>The difference of two normal distributions is itself normal.</p></li>
+<li><p>Independent (two random groups) vs dependent (paired) samples.</p></li>
+<li><p>Don’t memorize formulas — read how each combines mean, spread, and n.</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Comparing Population Means — Pop. Std. Dev. Known</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">z</span> <span class="pre">=</span> <span class="pre">(x̄₁</span> <span class="pre">−</span> <span class="pre">x̄₂)/√(σ₁²/n₁</span> <span class="pre">+</span> <span class="pre">σ₂²/n₂)</span></code> — additive variance in the denominator.</p></li>
+<li><p>Assumes normal populations, independent samples, known σ’s.</p></li>
+<li><p>Grocery checkout example: z = 3.12 &gt; 2.33 → the fast lane really is faster.</p></li>
+<li><p>The simplest (toy) case before σ becomes unknown.</p></li>
+<li><p>Subtracting in either order just flips the sign.</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Comparing Proportions for Different Populations</p>
+<ul class="simple">
+<li><p>Two-sample proportion z uses a <strong>pooled proportion</strong> <code class="docutils literal notranslate"><span class="pre">p_c</span></code> = combined successes / combined n.</p></li>
+<li><p>Perfume example: younger 19% vs older 31% (pooled 27%) → z = −2.21 → difference is real.</p></li>
+<li><p>Normal approximation to the binomial.</p></li>
+<li><p>Multiply the tail probability by 2 for a two-tailed p-value.</p></li>
+<li><p>Proportions “play nice” — no SD needed.</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Comparing Means — Std. Dev. Unknown, Assume Equal</p>
+<ul class="simple">
+<li><p>σ unknown ⇒ <strong>t</strong>; assume equal group variance ⇒ <strong>pooled SD <code class="docutils literal notranslate"><span class="pre">s_p</span></code></strong>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">df</span> <span class="pre">=</span> <span class="pre">n₁</span> <span class="pre">+</span> <span class="pre">n₂</span> <span class="pre">−</span> <span class="pre">2</span></code>.</p></li>
+<li><p>Lawn-mower example: t = −0.66 → fail to reject (an outlier inflates one group’s spread).</p></li>
+<li><p>Equal-variance assumption makes significance easier than unequal.</p></li>
+<li><p>Look at means <em>and</em> spread before trusting your gut.</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Comparing Means — Std. Dev. Unknown, Assume Unequal</p>
+<ul class="simple">
+<li><p>Most conservative case: unknown <strong>and unequal</strong> variance.</p></li>
+<li><p>Uses the <strong>Welch degrees of freedom</strong> — compute it, then <strong>truncate down</strong> (10.86 → 10).</p></li>
+<li><p>Paper-towel example: clearly different means + spreads → reject.</p></li>
+<li><p>Hardest test to reject, so a rejection is very trustworthy.</p></li>
+<li><p>The safe default when you must be sure two groups differ.</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Two-Sample Test for Dependent Samples (Paired Tests)</p>
+<ul class="simple">
+<li><p>Paired = same units measured twice (before/after; same 10 houses, two appraisers).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">t</span> <span class="pre">=</span> <span class="pre">d̄</span> <span class="pre">/</span> <span class="pre">(s_d/√n)</span></code>, <code class="docutils literal notranslate"><span class="pre">df</span> <span class="pre">=</span> <span class="pre">n</span> <span class="pre">−</span> <span class="pre">1</span></code> — work on the <strong>differences</strong>.</p></li>
+<li><p>Pairing removes between-subject variation ⇒ easier to detect a real effect.</p></li>
+<li><p>Mortgage example: t = 3.3 → a real difference in appraisals.</p></li>
+<li><p>Small s_d + large n ⇒ large t.</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Comparison of Dependent vs. Independent Tests</p>
+<ul class="simple">
+<li><p>The <strong>same</strong> mortgage data: paired test rejects; independent two-sample test does <strong>not</strong>.</p></li>
+<li><p>Independent test’s large pooled variance shrinks t toward 0.</p></li>
+<li><p>Matching the <strong>test to the data design</strong> is essential.</p></li>
+<li><p>Use the paired test when data is genuinely paired — or miss a real effect.</p></li>
+<li><p>Wrong test ⇒ wrong (and costly) conclusion.</p></li>
+</ul>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="module-2-probability-distributions.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Chapter 2 — Probability Distributions</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="module-4-maximum-likelihood-estimation.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Chapter 4 — Maximum Likelihood Estimation</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-five-step-procedure">3.1 The five-step procedure</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#one-sample-tests-worked">3.2 One-sample tests, worked</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#two-sample-tests-the-big-idea">3.3 Two-sample tests: the big idea</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#two-sample-means-and-proportions">3.4 Two-sample means and proportions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#paired-dependent-samples">3.5 Paired (dependent) samples</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#wrap-up">Wrap-up</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-key-points">📌 Lecture key points</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Dr. Dave Wanik · University of Connecticut (OPIM 5603)
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,741 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Chapter 5 — Regression &#8212; Statistics in Business Analytics</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=cb00a2e8" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=b8b12719"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"]]}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'module-5-regression';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Chapter 4 — Maximum Likelihood Estimation" href="module-4-maximum-likelihood-estimation.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+<aside class="bd-header-announcement" aria-label="Announcement">
+  <div class="bd-header-announcement__content">📊 <strong>OPIM 5603 · Statistics in Business Analytics</strong> — draft course companion (work in progress)</div>
+</aside>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Statistics in Business Analytics</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="module-1-descriptive-statistics.html">Chapter 1 — Describing Data with R</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module-2-probability-distributions.html">Chapter 2 — Probability Distributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module-3-hypothesis-testing.html">Chapter 3 — Hypothesis Testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module-4-maximum-likelihood-estimation.html">Chapter 4 — Maximum Likelihood Estimation</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Chapter 5 — Regression</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/module-5-regression.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Chapter 5 — Regression</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#correlation-and-simple-linear-regression">5.1 Correlation and simple linear regression</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multiple-linear-regression">5.2 Multiple linear regression</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generalized-linear-models">5.3 Generalized linear models</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#special-topics-categorical-data-analysis-chi-square">5.4 Special topics — categorical data analysis (chi-square)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#wrap-up">Wrap-up</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-key-points">📌 Lecture key points</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="chapter-5-regression">
+<h1>Chapter 5 — Regression<a class="headerlink" href="#chapter-5-regression" title="Link to this heading">#</a></h1>
+<div class="seealso dropdown admonition">
+<p class="admonition-title">🔗 Notebooks for this chapter</p>
+<p>Open in Colab and <strong>Runtime → Run all</strong> (R notebooks).</p>
+<ul class="simple">
+<li><p><strong>Correlation and Simple Linear Regression</strong>   <a class="reference external" href="https://colab.research.google.com/github/drdave-teaching/OPIM5603-notebooks/blob/main/Module5/Correlation_and_Simple_Linear_Regression.ipynb"><img alt="Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a>   <a class="reference external" href="https://github.com/drdave-teaching/OPIM5603-notebooks/blob/main/Module5/Correlation_and_Simple_Linear_Regression.ipynb">GitHub</a></p></li>
+<li><p><strong>Recipe: Simple Linear Regression</strong>   <a class="reference external" href="https://colab.research.google.com/github/drdave-teaching/OPIM5603-notebooks/blob/main/Module5/Recipe_SimpleLinearRegression.ipynb"><img alt="Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a>   <a class="reference external" href="https://github.com/drdave-teaching/OPIM5603-notebooks/blob/main/Module5/Recipe_SimpleLinearRegression.ipynb">GitHub</a></p></li>
+<li><p><strong>Recipe: Multiple Linear Regression</strong>   <a class="reference external" href="https://colab.research.google.com/github/drdave-teaching/OPIM5603-notebooks/blob/main/Module5/Recipe_MultipleLinearRegression.ipynb"><img alt="Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a>   <a class="reference external" href="https://github.com/drdave-teaching/OPIM5603-notebooks/blob/main/Module5/Recipe_MultipleLinearRegression.ipynb">GitHub</a></p></li>
+<li><p><strong>Recipe: Logistic Regression</strong>   <a class="reference external" href="https://colab.research.google.com/github/drdave-teaching/OPIM5603-notebooks/blob/main/Module5/Recipe_LogisticRegression.ipynb"><img alt="Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a>   <a class="reference external" href="https://github.com/drdave-teaching/OPIM5603-notebooks/blob/main/Module5/Recipe_LogisticRegression.ipynb">GitHub</a></p></li>
+<li><p><strong>Recipe: Stepwise Logistic Regression</strong>   <a class="reference external" href="https://colab.research.google.com/github/drdave-teaching/OPIM5603-notebooks/blob/main/Module5/Recipe_Stepwise_LogisticRegression.ipynb"><img alt="Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a>   <a class="reference external" href="https://github.com/drdave-teaching/OPIM5603-notebooks/blob/main/Module5/Recipe_Stepwise_LogisticRegression.ipynb">GitHub</a></p></li>
+<li><p><strong>Recipe: Poisson Regression</strong>   <a class="reference external" href="https://colab.research.google.com/github/drdave-teaching/OPIM5603-notebooks/blob/main/Module5/Recipe_PoissonRegression.ipynb"><img alt="Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a>   <a class="reference external" href="https://github.com/drdave-teaching/OPIM5603-notebooks/blob/main/Module5/Recipe_PoissonRegression.ipynb">GitHub</a></p></li>
+<li><p><strong>Categorical Data Analysis (Nominal)</strong>   <a class="reference external" href="https://colab.research.google.com/github/drdave-teaching/OPIM5603-notebooks/blob/main/Module6/Categorical_Data_Analysis_Nominal_Data.ipynb"><img alt="Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a>   <a class="reference external" href="https://github.com/drdave-teaching/OPIM5603-notebooks/blob/main/Module6/Categorical_Data_Analysis_Nominal_Data.ipynb">GitHub</a></p></li>
+</ul>
+</div>
+<p>This capstone ties the whole course together. We move from <strong>correlation</strong> to <strong>simple</strong> and <strong>multiple linear regression</strong>, extend to <strong>generalized linear models</strong> (logistic and Poisson), and finish with <strong>categorical data analysis</strong> (chi-square). Throughout, the theme is <strong>inference</strong>: not just predicting, but understanding and defending what drives the outcome.</p>
+<section id="correlation-and-simple-linear-regression">
+<h2>5.1 Correlation and simple linear regression<a class="headerlink" href="#correlation-and-simple-linear-regression" title="Link to this heading">#</a></h2>
+<p>The <strong>correlation coefficient</strong> <code class="docutils literal notranslate"><span class="pre">r</span></code> (−1 to +1) measures the <em>strength of a linear relationship</em>; <code class="docutils literal notranslate"><span class="pre">cor.test()</span></code> even tests whether it’s significantly different from zero (a t-test with <code class="docutils literal notranslate"><span class="pre">df</span> <span class="pre">=</span> <span class="pre">n</span> <span class="pre">−</span> <span class="pre">2</span></code>). But beware: correlation is not causation.</p>
+<div class="warning admonition">
+<p class="admonition-title">Correlation ≠ causation</p>
+<p>Strong correlations can be <strong>spurious</strong> — donkey populations and PhDs granted, peanut and aspirin consumption. A significant <code class="docutils literal notranslate"><span class="pre">r</span></code> says two variables <em>move together</em>, never that one <em>causes</em> the other.</p>
+</div>
+<p><strong>Least squares</strong> fits the line that minimizes squared error: slope <code class="docutils literal notranslate"><span class="pre">b</span> <span class="pre">=</span> <span class="pre">r</span> <span class="pre">·</span> <span class="pre">(s_y</span> <span class="pre">/</span> <span class="pre">s_x)</span></code>, intercept <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">=</span> <span class="pre">ȳ</span> <span class="pre">−</span> <span class="pre">b·x̄</span></code>. (For a linear model with normal errors, least squares and MLE give the <strong>same</strong> answer.) Then we test the slope: <code class="docutils literal notranslate"><span class="pre">t</span> <span class="pre">=</span> <span class="pre">b</span> <span class="pre">/</span> <span class="pre">SE_b</span></code>, where <code class="docutils literal notranslate"><span class="pre">SE_b</span></code>’s numerator is the <strong>standard error of the estimate</strong> <code class="docutils literal notranslate"><span class="pre">S_yx</span></code>. A neat result — in simple regression the <strong>slope test and the correlation test produce the identical t and p-value</strong>, and <code class="docutils literal notranslate"><span class="pre">R²</span> <span class="pre">=</span> <span class="pre">r²</span></code>.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">sales</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">calls</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">df</span><span class="p">)</span>
+<span class="nf">summary</span><span class="p">(</span><span class="n">m</span><span class="p">)</span><span class="w">                 </span><span class="c1"># slope, SE, t, p, R²</span>
+<span class="nf">predict</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">newdata</span><span class="p">,</span><span class="w"> </span><span class="n">interval</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;confidence&quot;</span><span class="p">)</span><span class="w">   </span><span class="c1"># mean response</span>
+<span class="nf">predict</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">newdata</span><span class="p">,</span><span class="w"> </span><span class="n">interval</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;prediction&quot;</span><span class="p">)</span><span class="w">   </span><span class="c1"># a single new case (wider)</span>
+</pre></div>
+</div>
+<p>A <strong>confidence interval</strong> estimates the <em>mean</em> response for given X; a <strong>prediction interval</strong> covers a <em>single new</em> observation and is always wider (the formula differs by a <code class="docutils literal notranslate"><span class="pre">+1</span></code>). If the target is skewed, a <strong>log transform</strong> can dramatically improve fit (the golf-winnings example jumps from R² 0.61 to 0.93).</p>
+</section>
+<section id="multiple-linear-regression">
+<h2>5.2 Multiple linear regression<a class="headerlink" href="#multiple-linear-regression" title="Link to this heading">#</a></h2>
+<p>More predictors, same machinery. Use the clean <code class="docutils literal notranslate"><span class="pre">y</span> <span class="pre">~</span> <span class="pre">.</span></code> syntax (“everything else predicts y”), read <strong>R²</strong>, and prune <strong>insignificant predictors one at a time</strong> (drop the highest p-value, refit, repeat). Watch the sign convention: a <strong>residual = actual − predicted</strong>, so an <em>under</em>-estimate is <em>positive</em>.</p>
+<p>Two preprocessing best practices: <strong>transform the target</strong> toward normality (check with the Anderson-Darling test in <code class="docutils literal notranslate"><span class="pre">goftest</span></code>; pick a power with <strong>Tukey’s ladder</strong> / <code class="docutils literal notranslate"><span class="pre">car::powerTransform</span></code>), and optionally <strong>standardize X</strong> (z-score or, Dave’s preference, min-max so every column lives on 0–1).</p>
+<div class="warning admonition">
+<p class="admonition-title">Multicollinearity wrecks inference — check VIF</p>
+<p><strong>Correlated predictors</strong> add no information, destabilize coefficients (even flipping signs), and can make you delete the wrong variable. Compute the <strong>variance inflation factor</strong> <code class="docutils literal notranslate"><span class="pre">VIF_j</span> <span class="pre">=</span> <span class="pre">1/(1</span> <span class="pre">−</span> <span class="pre">R²_j)</span></code>; drop any predictor with <strong>VIF &gt; 5</strong>, highest first, then refit. (In <em>prediction</em>-only data-science work you may not care — but a stats class cares about <strong>inference</strong>.)</p>
+</div>
+<p>Once predictors are uncorrelated, replace manual p-pruning with <strong>stepwise selection</strong> (<code class="docutils literal notranslate"><span class="pre">stepAIC</span></code>, forward or backward) — it adds/removes terms to minimize <strong>AIC</strong> (= −2·log-likelihood + 2k), favoring <strong>parsimony</strong>. Evaluate with <strong>MAE / RMSE / MAPE</strong>, an <strong>actual-vs-predicted</strong> plot (the 45° line), and confidence/prediction intervals. The full <strong>soup-to-nuts recipe</strong>: read → explore → full model → VIF prune → stepwise → error metrics → actual-vs-predicted → inference.</p>
+</section>
+<section id="generalized-linear-models">
+<h2>5.3 Generalized linear models<a class="headerlink" href="#generalized-linear-models" title="Link to this heading">#</a></h2>
+<p>When the target isn’t continuous-normal, keep the linear core and <strong>transform</strong> (a GLM).</p>
+<p><strong>Logistic regression</strong> (binary target). Most of the work is <strong>data cleaning</strong>: coerce mistyped columns to numeric, drop NAs/ID columns, <strong>balance the classes</strong> (downsample the majority), and recode the target to 0/1. Fit with <code class="docutils literal notranslate"><span class="pre">glm(...,</span> <span class="pre">family</span> <span class="pre">=</span> <span class="pre">binomial)</span></code>, then <strong>exponentiate coefficients</strong> to read them as <strong>odds</strong> (a coefficient giving <code class="docutils literal notranslate"><span class="pre">e^β</span> <span class="pre">=</span> <span class="pre">1.80</span></code> is a ~80% increase in the odds). Evaluate with the <strong>confusion matrix</strong> → accuracy, precision, recall, AUC. Prune insignificant predictors iteratively (Dave’s affectionate “p-hacking”) or let <strong><code class="docutils literal notranslate"><span class="pre">stepAIC</span></code></strong> do it.</p>
+<p><strong>Poisson regression</strong> (count target). Fit with <code class="docutils literal notranslate"><span class="pre">family</span> <span class="pre">=</span> <span class="pre">poisson</span></code>, modeling <code class="docutils literal notranslate"><span class="pre">log</span> <span class="pre">λ</span></code> as linear and <strong>exponentiating</strong> coefficients for a <em>multiplicative</em> effect. Encode categoricals as <strong>k−1 dummies</strong> (<code class="docutils literal notranslate"><span class="pre">fastDummies</span></code>); an <code class="docutils literal notranslate"><span class="pre">NA</span></code> coefficient flags a <strong>linear combination</strong> (e.g., total meds = prescribed + non-prescribed). Watch <strong>over-dispersion</strong> (variance ≫ mean) — if the deviance/df ratio is well above 1, the standard errors are wrong and you’d reach for <strong>quasi-Poisson</strong> (at the cost of losing AIC/log-likelihood).</p>
+<div class="note admonition">
+<p class="admonition-title">Stats vs. data science</p>
+<p>Two mindsets share these tools. <strong>Inference</strong> (this course): keep models clean — check VIF, prune to significant predictors, interpret coefficients. <strong>Prediction</strong> (black-box ML): throw everything in, standardize, and optimize accuracy while ignoring the coefficients. Same <code class="docutils literal notranslate"><span class="pre">glm</span></code>, different goals.</p>
+</div>
+</section>
+<section id="special-topics-categorical-data-analysis-chi-square">
+<h2>5.4 Special topics — categorical data analysis (chi-square)<a class="headerlink" href="#special-topics-categorical-data-analysis-chi-square" title="Link to this heading">#</a></h2>
+<p>Not every relationship needs a regression. For <strong>nominal</strong> (unordered) categories, the <strong>chi-square</strong> distribution lets us compare <strong>observed vs. expected frequencies</strong>. It’s never negative, right-skewed, and parameterized by <strong>degrees of freedom</strong> based on the number of <em>categories</em>, not the sample size. The statistic is always</p>
+<div class="math notranslate nohighlight">
+\[\chi^2 = \sum \frac{(O - E)^2}{E}\]</div>
+<p>Three tests:</p>
+<ul class="simple">
+<li><p><strong>Goodness of fit, equal frequencies</strong> — do restaurant entrée choices differ from uniform? <code class="docutils literal notranslate"><span class="pre">df</span> <span class="pre">=</span> <span class="pre">categories</span> <span class="pre">−</span> <span class="pre">1</span></code>.</p></li>
+<li><p><strong>Goodness of fit, unequal frequencies</strong> — local vs. national hospitalization rates; expected = proportion × total. <strong>Rule:</strong> every expected cell ≥ 5, or combine categories (small expected cells falsely inflate χ²).</p></li>
+<li><p><strong>Test of independence</strong> — are two categorical variables related (smoking &amp; drinking; hometown &amp; behavior)? <code class="docutils literal notranslate"><span class="pre">E</span> <span class="pre">=</span> <span class="pre">row</span> <span class="pre">total</span> <span class="pre">×</span> <span class="pre">column</span> <span class="pre">total</span> <span class="pre">/</span> <span class="pre">grand</span> <span class="pre">total</span></code>, <code class="docutils literal notranslate"><span class="pre">df</span> <span class="pre">=</span> <span class="pre">(rows</span> <span class="pre">−</span> <span class="pre">1)(cols</span> <span class="pre">−</span> <span class="pre">1)</span></code> (Weldon’s 26,000 dice rolls turn out biased).</p></li>
+</ul>
+</section>
+<section id="wrap-up">
+<h2>Wrap-up<a class="headerlink" href="#wrap-up" title="Link to this heading">#</a></h2>
+<div class="tip admonition">
+<p class="admonition-title">Key takeaways</p>
+<ul class="simple">
+<li><p><strong>Correlation</strong> <code class="docutils literal notranslate"><span class="pre">r</span></code> measures linear strength (≠ causation); test it, and remember in SLR the <strong>slope test = correlation test</strong> and <strong>R² = r²</strong>.</p></li>
+<li><p><strong>Least squares</strong> = MLE under normal errors; <strong>CI</strong> (mean response) vs <strong>PI</strong> (single case, wider); <strong>transform</strong> skewed targets.</p></li>
+<li><p><strong>MLR</strong>: prune insignificant terms; <strong>residual = actual − predicted</strong>; kill multicollinearity with <strong>VIF &gt; 5</strong>, then <strong>stepAIC</strong> for parsimony; report <strong>MAE/RMSE/MAPE</strong> + actual-vs-predicted.</p></li>
+<li><p><strong>Logistic GLM</strong>: clean + balance data, <code class="docutils literal notranslate"><span class="pre">family</span> <span class="pre">=</span> <span class="pre">binomial</span></code>, <strong>exponentiate to odds</strong>, judge with the <strong>confusion matrix</strong>.</p></li>
+<li><p><strong>Poisson GLM</strong>: <code class="docutils literal notranslate"><span class="pre">family</span> <span class="pre">=</span> <span class="pre">poisson</span></code>, <code class="docutils literal notranslate"><span class="pre">log</span> <span class="pre">λ</span></code> linear, <strong>exponentiate</strong> for multiplicative effects; dummy-encode categoricals; watch <strong>over-dispersion</strong>.</p></li>
+<li><p><strong>Chi-square</strong> for nominal data: <code class="docutils literal notranslate"><span class="pre">χ²</span> <span class="pre">=</span> <span class="pre">Σ(O−E)²/E</span></code>; goodness-of-fit (equal/unequal) and <strong>independence</strong>; mind df and the expected-≥5 rule.</p></li>
+</ul>
+</div>
+</section>
+<hr class="docutils" />
+<section id="lecture-key-points">
+<h2>📌 Lecture key points<a class="headerlink" href="#lecture-key-points" title="Link to this heading">#</a></h2>
+<p><em>Distilled takeaways from the video lectures behind this chapter — click each to expand.</em></p>
+<div class="note dropdown admonition">
+<p class="admonition-title">Correlation Analysis</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">r</span></code> ∈ [−1, 1] measures the <strong>strength of a linear</strong> relationship.</p></li>
+<li><p>Compute by hand or with <code class="docutils literal notranslate"><span class="pre">cor()</span></code>; test it with <code class="docutils literal notranslate"><span class="pre">cor.test()</span></code> (t, <code class="docutils literal notranslate"><span class="pre">df</span> <span class="pre">=</span> <span class="pre">n</span> <span class="pre">−</span> <span class="pre">2</span></code>).</p></li>
+<li><p><strong>Correlation ≠ causation</strong> — beware spurious correlations.</p></li>
+<li><p>A 0.76 is a moderately strong positive trend.</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Regression Analysis</p>
+<ul class="simple">
+<li><p><strong>Least squares</strong> fits the line minimizing squared error.</p></li>
+<li><p>Slope <code class="docutils literal notranslate"><span class="pre">b</span> <span class="pre">=</span> <span class="pre">r</span> <span class="pre">·</span> <span class="pre">s_y/s_x</span></code>; intercept <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">=</span> <span class="pre">ȳ</span> <span class="pre">−</span> <span class="pre">b·x̄</span></code>.</p></li>
+<li><p>Same estimates as <strong>MLE</strong> when errors are normal.</p></li>
+<li><p>The line passes through (x̄, ȳ); predictions fall on it.</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Testing the Significance of the Slope</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">t</span> <span class="pre">=</span> <span class="pre">b</span> <span class="pre">/</span> <span class="pre">SE_b</span></code>; <code class="docutils literal notranslate"><span class="pre">SE_b</span></code> has the <strong>standard error of estimate</strong> <code class="docutils literal notranslate"><span class="pre">S_yx</span></code> as numerator.</p></li>
+<li><p>Two-tailed test, <code class="docutils literal notranslate"><span class="pre">df</span> <span class="pre">=</span> <span class="pre">n</span> <span class="pre">−</span> <span class="pre">2</span></code>.</p></li>
+<li><p>In SLR this gives the <strong>same t and p as the correlation test</strong>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">lm()</span></code> + <code class="docutils literal notranslate"><span class="pre">summary()</span></code> reports it directly.</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">R2</p>
+<ul class="simple">
+<li><p><strong>Coefficient of determination</strong> <code class="docutils literal notranslate"><span class="pre">R²</span> <span class="pre">=</span> <span class="pre">1</span> <span class="pre">−</span> <span class="pre">SSE/SST</span></code> (variance explained).</p></li>
+<li><p>In simple regression, <code class="docutils literal notranslate"><span class="pre">R²</span> <span class="pre">=</span> <span class="pre">r²</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">S_yx</span></code> (std error of estimate) drives both <code class="docutils literal notranslate"><span class="pre">SE_b</span></code> and the intervals.</p></li>
+<li><p>Better fit ⇒ smaller <code class="docutils literal notranslate"><span class="pre">S_yx</span></code>, bigger <code class="docutils literal notranslate"><span class="pre">R²</span></code>.</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Confidence Intervals vs. Prediction Intervals</p>
+<ul class="simple">
+<li><p><strong>CI</strong> = the <em>mean</em> response for given X; <strong>PI</strong> = a <em>single new</em> case.</p></li>
+<li><p>Formulas differ only by a <code class="docutils literal notranslate"><span class="pre">+1</span></code> ⇒ the <strong>PI is always wider</strong>.</p></li>
+<li><p>Both shrink when the model fits well (small <code class="docutils literal notranslate"><span class="pre">S_yx</span></code>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">predict(m,</span> <span class="pre">interval</span> <span class="pre">=</span> <span class="pre">&quot;confidence&quot;</span> <span class="pre">/</span> <span class="pre">&quot;prediction&quot;)</span></code>.</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Transforming Data</p>
+<ul class="simple">
+<li><p>A skewed target hurts fit; a <strong>log transform</strong> can fix it.</p></li>
+<li><p>Golf winnings: R² jumps <strong>0.61 → 0.93</strong> after <code class="docutils literal notranslate"><span class="pre">log</span></code>.</p></li>
+<li><p>Transforming changes interpretation (you’re modeling <code class="docutils literal notranslate"><span class="pre">log</span> <span class="pre">y</span></code>).</p></li>
+<li><p>Also clean dirty fields (strip commas, coerce to numeric).</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Following a Recipe — Simple Linear Regression</p>
+<ul class="simple">
+<li><p>Workflow: read → clean → explore → <code class="docutils literal notranslate"><span class="pre">lm</span></code> → error metrics → actual-vs-predicted.</p></li>
+<li><p>Fit <code class="docutils literal notranslate"><span class="pre">log(winnings)</span> <span class="pre">~</span> <span class="pre">score</span></code>; interpret slope and R² (0.94).</p></li>
+<li><p><strong>MAE / MAPE / RMSE</strong> for performance; bias for over/under.</p></li>
+<li><p>Plot the 45° actual-vs-predicted line (+ CI/PI for SLR).</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Getting Started with Boston Housing and MLR</p>
+<ul class="simple">
+<li><p>Predict <code class="docutils literal notranslate"><span class="pre">medv</span></code> (dependent) from many <strong>independent</strong> variables.</p></li>
+<li><p>Convert the <code class="docutils literal notranslate"><span class="pre">chas</span></code> 0/1 indicator to a <strong>factor</strong>; <code class="docutils literal notranslate"><span class="pre">str</span></code>/<code class="docutils literal notranslate"><span class="pre">summary</span></code> recon.</p></li>
+<li><p>Check the <strong>target’s distribution</strong> before modeling.</p></li>
+<li><p>Independence of predictors matters — correlation check comes later.</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Distribution of Target Variable and Transformations</p>
+<ul class="simple">
+<li><p>A normal target ⇒ normal errors (a key assumption).</p></li>
+<li><p><strong>Anderson-Darling</strong> (<code class="docutils literal notranslate"><span class="pre">goftest</span></code>) tests normality quantitatively.</p></li>
+<li><p><strong>Tukey’s ladder</strong> / <code class="docutils literal notranslate"><span class="pre">car::powerTransform</span></code> picks the power (e.g., cube root).</p></li>
+<li><p>Transform improves fit but complicates coefficient interpretation.</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Standardization Techniques</p>
+<ul class="simple">
+<li><p><strong>z-score</strong> = (x − mean)/sd; <strong>min-max</strong> = (x − min)/range (0–1).</p></li>
+<li><p>Puts predictors on a level playing field (optional in stats).</p></li>
+<li><p>Dave prefers <strong>min-max</strong> (coefficients read as per-1% change).</p></li>
+<li><p>Helpful for stability/prediction; less so for inference.</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Model Fitting, Interpretation and Iterative Variable Selection</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">y</span> <span class="pre">~</span> <span class="pre">.</span></code> hack models against all other columns (clean data only).</p></li>
+<li><p>Read <strong>R²</strong>; prune the <strong>highest p-value</strong> predictor, refit, repeat.</p></li>
+<li><p><strong>Residual = actual − predicted</strong> (under-estimates are positive).</p></li>
+<li><p>Check residuals are ~normal and centered on zero.</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Error Metrics and Intervals</p>
+<ul class="simple">
+<li><p><strong>MAE</strong> (avg absolute error), <strong>MAPE</strong> (percent), <strong>RMSE</strong> (penalizes outliers).</p></li>
+<li><p>Residual vs error sign convention (residual = actual − predicted).</p></li>
+<li><p>Confidence intervals on <strong>coefficients</strong> (≈ estimate ± 2·SE).</p></li>
+<li><p>CI vs PI for predictions; the recipe summary for MLR.</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Stepwise Variable Selection and AIC for Model Comparison</p>
+<ul class="simple">
+<li><p><strong>Correlated predictors</strong> destabilize inference → compute <strong>VIF</strong>, drop &gt; 5.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">VIF_j</span> <span class="pre">=</span> <span class="pre">1/(1</span> <span class="pre">−</span> <span class="pre">R²_j)</span></code> — how predictable a predictor is from the rest.</p></li>
+<li><p><strong>stepAIC</strong> (forward/backward) prunes to minimize <strong>AIC</strong> (parsimony).</p></li>
+<li><p>Game plan: full model → VIF → stepwise → evaluate.</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Recipe: Multiple Linear Regression</p>
+<ul class="simple">
+<li><p>Soup-to-nuts: read → full model → VIF prune → stepAIC → metrics → inference.</p></li>
+<li><p>Drop <code class="docutils literal notranslate"><span class="pre">tax</span></code> (highest VIF), then stepwise removes weak terms.</p></li>
+<li><p>Compare AICs; favor the simpler model (parsimony).</p></li>
+<li><p>Interpret signs (rooms ↑ price, NOx ↓ price); note underestimated high-value homes.</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Introduction to logistic regression and data clean-up (Pt. 1)</p>
+<ul class="simple">
+<li><p>Logistic = a <strong>GLM</strong> for a 0/1 target.</p></li>
+<li><p>Clean: coerce the <code class="docutils literal notranslate"><span class="pre">?</span></code>-laden numeric column, drop NAs and the <strong>ID</strong> column.</p></li>
+<li><p><strong>Balance classes</strong> by downsampling the majority (set a seed).</p></li>
+<li><p>Recode the target (2/4 → 0/1) before fitting.</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Fitting the (full) logistic regression and interpreting its output (Pt. 2)</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">glm(class</span> <span class="pre">~</span> <span class="pre">.,</span> <span class="pre">family</span> <span class="pre">=</span> <span class="pre">binomial)</span></code>; <strong>stars</strong> mark significance.</p></li>
+<li><p>Predictions are probabilities → <strong>round at 0.5</strong> to 0/1.</p></li>
+<li><p><strong>Exponentiate coefficients</strong> to read <strong>odds</strong> (e.g., 1.80 = +80% odds).</p></li>
+<li><p>Positive coef ↑ odds; ignore the intercept’s meaning.</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Calculate error metrics, remove insignificant predictors, reinterpret (Pt. 3)</p>
+<ul class="simple">
+<li><p><strong>Confusion matrix</strong> → accuracy, precision, recall (+ AUC).</p></li>
+<li><p>Precision = TP/(TP+FP); recall = TP/(TP+FN).</p></li>
+<li><p>Iteratively drop the highest-p predictor, refit (“p-hacking” lovingly).</p></li>
+<li><p>Compare full vs reduced by <strong>AIC</strong> (lower wins; nearly equal fit).</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Fitting a stepwise logistic regression model</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">MASS::stepAIC</span></code> automates backward elimination for a GLM.</p></li>
+<li><p>Correlated/weak predictors drop out as AIC falls.</p></li>
+<li><p>Reduced model ≈ full model accuracy with ~half the predictors.</p></li>
+<li><p>Optionally remove a last borderline term for all-significant predictors.</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Fitting a Poisson model (Pt. 1 — fastDummies)</p>
+<ul class="simple">
+<li><p>Poisson = count target (0 → ∞, integers); mean = variance = λ.</p></li>
+<li><p>Encode categoricals as <strong>k − 1 dummies</strong> with <code class="docutils literal notranslate"><span class="pre">fastDummies</span></code> (avoid collinearity).</p></li>
+<li><p>Drop the original factor columns after dummying.</p></li>
+<li><p>Reference category is the one left out.</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Fitting a Poisson model (Pt. 2 — Evaluation)</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">glm(...,</span> <span class="pre">family</span> <span class="pre">=</span> <span class="pre">poisson)</span></code>, model <code class="docutils literal notranslate"><span class="pre">log</span> <span class="pre">λ</span></code>; <strong>exponentiate</strong> for multiplicative effects.</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">NA</span></code> coefficient</strong> = a linear combination (medicine = prescribed + non-prescribed) — drop one.</p></li>
+<li><p>Evaluate with MAE/RMSE/MAPE, actual-vs-predicted; <code class="docutils literal notranslate"><span class="pre">stepAIC</span></code> to prune.</p></li>
+<li><p>Watch <strong>over-dispersion</strong> (deviance/df ≫ 1) → consider <strong>quasi-Poisson</strong>.</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Introduction to Categorical Data Analysis</p>
+<ul class="simple">
+<li><p>For <strong>nominal</strong> (unordered) categories vs <strong>ordinal</strong> (ranked).</p></li>
+<li><p>The <strong>chi-square</strong> distribution: never negative, right-skewed, df by <strong>categories</strong>.</p></li>
+<li><p>Visualize with <code class="docutils literal notranslate"><span class="pre">table()</span></code>, <code class="docutils literal notranslate"><span class="pre">prop.table()</span></code>, and bar plots.</p></li>
+<li><p>Sets up goodness-of-fit and independence tests.</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Goodness of Fit with Equal Frequencies</p>
+<ul class="simple">
+<li><p>Compare observed counts to a <strong>uniform</strong> expectation (restaurant entrées).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">χ²</span> <span class="pre">=</span> <span class="pre">Σ</span> <span class="pre">(O</span> <span class="pre">−</span> <span class="pre">E)²/E</span></code>; right-tailed test, <code class="docutils literal notranslate"><span class="pre">df</span> <span class="pre">=</span> <span class="pre">categories</span> <span class="pre">−</span> <span class="pre">1</span></code>.</p></li>
+<li><p>Big O−E gaps ⇒ reject “all equal.”</p></li>
+<li><p>Verify with base R <code class="docutils literal notranslate"><span class="pre">chisq.test()</span></code>.</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Goodness of Fit with Unequal Frequencies</p>
+<ul class="simple">
+<li><p>Expected counts from given proportions × total (local vs national).</p></li>
+<li><p>Same <code class="docutils literal notranslate"><span class="pre">χ²</span> <span class="pre">=</span> <span class="pre">Σ(O−E)²/E</span></code>, <code class="docutils literal notranslate"><span class="pre">df</span> <span class="pre">=</span> <span class="pre">categories</span> <span class="pre">−</span> <span class="pre">1</span></code>.</p></li>
+<li><p><strong>Rule:</strong> each expected cell ≥ 5, or <strong>combine</strong> categories.</p></li>
+<li><p>Small expected cells falsely inflate χ² and over-reject.</p></li>
+</ul>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Chi-square Test for Independence</p>
+<ul class="simple">
+<li><p>Tests whether <strong>two categorical variables</strong> are related (smoking &amp; drinking).</p></li>
+<li><p>Expected <code class="docutils literal notranslate"><span class="pre">E</span> <span class="pre">=</span> <span class="pre">(row</span> <span class="pre">total</span> <span class="pre">×</span> <span class="pre">column</span> <span class="pre">total)</span> <span class="pre">/</span> <span class="pre">grand</span> <span class="pre">total</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">df</span> <span class="pre">=</span> <span class="pre">(rows</span> <span class="pre">−</span> <span class="pre">1)(columns</span> <span class="pre">−</span> <span class="pre">1)</span></code>; feed a table to <code class="docutils literal notranslate"><span class="pre">chisq.test()</span></code>.</p></li>
+<li><p>Weldon’s 26,000 dice rolls come out <strong>biased</strong> (distributions don’t match).</p></li>
+</ul>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="module-4-maximum-likelihood-estimation.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Chapter 4 — Maximum Likelihood Estimation</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#correlation-and-simple-linear-regression">5.1 Correlation and simple linear regression</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multiple-linear-regression">5.2 Multiple linear regression</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generalized-linear-models">5.3 Generalized linear models</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#special-topics-categorical-data-analysis-chi-square">5.4 Special topics — categorical data analysis (chi-square)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#wrap-up">Wrap-up</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-key-points">📌 Lecture key points</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Dr. Dave Wanik · University of Connecticut (OPIM 5603)
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

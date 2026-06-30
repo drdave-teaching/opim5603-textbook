@@ -1,0 +1,15 @@
+/* Red course banner (announcement bar) for OPIM 5603 */
+.bd-header-announcement,
+.announcement,
+div.announcement,
+.header-announcement {
+  background-color: #B91C1C !important;
+  color: #ffffff !important;
+  text-align: center;
+  font-size: 0.95rem;
+}
+.bd-header-announcement a,
+.announcement a { color: #ffe5e5 !important; text-decoration: underline; }
+
+/* subtle red accent on chapter h1s to match the banner */
+h1 { border-bottom: 3px solid #B91C1C; padding-bottom: .2em; }
