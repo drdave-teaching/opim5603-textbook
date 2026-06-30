@@ -101,53 +101,58 @@ The t value is a **penalty for small samples** (more uncertainty when you don't 
 
 *Distilled takeaways from the video lectures behind this chapter — click each to expand.*
 
+```{admonition} Sourcing note
+:class: note dropdown
+The seven **Module 2.1 (discrete)** cards and **"Introduction to Continuous Variables"** are drawn from Dr. Wanik's `Discrete Distributions` and `Continuous Distributions` course notebooks and video notes — those lectures aren't in the captioned video set, so unlike the rest of the book they're not distilled from a spoken transcript.
+```
+
 
 :::{admonition} Introduction to discrete distributions (Pt. 1)
 :class: note dropdown
-- Set up the runtime; simulate randomness with `sample()` (flip a coin, roll a die).
-- Introduces the idea of a **probability distribution**.
-- Flip a coin 10 times to watch outcomes vary around the expectation.
-- Builds intuition before formulas.
+- A random variable's outcome is uncertain; probability is always in [0, 1].
+- A **probability distribution** lists every outcome and its probability (they sum to 1 — mutually exclusive, collectively exhaustive).
+- Find a probability by counting: favorable outcomes / total outcomes (coin = 1/2, die = 1/6).
+- Simulate draws with **`sample(x, size, replace = TRUE, prob = )`**.
 :::
 
 :::{admonition} Introduction to discrete distributions (Pt. 2)
 :class: note dropdown
-- Use **Monte Carlo simulation** to build a probability distribution empirically.
-- Introduces the **binomial** (success/failure, e.g., heads/tails).
-- Sum probabilities across a distribution in R.
-- It gets easier with practice.
+- Toss a coin 10 times and count heads → build the distribution by **Monte Carlo**: wrap the draw in a function and **`replicate(10000, f1())`**.
+- Summarize with **`table()`** / **`prop.table()`** and visualize with **`barplot()`**.
+- Answer "≤ 3 heads" or "an even number of heads" by **summing** the relevant probabilities.
+- Works for weighted coins (e.g., success prob 0.8) and any number of trials.
 :::
 
 :::{admonition} Mean and Variance of a Discrete Distribution
 :class: note dropdown
-- **Mean** = Σ (value × probability).
-- **Variance** = Σ (value − mean)² × probability.
-- Compute both directly in R.
-- The values can be anything (e.g., 2, 8, 10) — not just 0, 1, 2.
+- **Mean** μ = Σ (value × probability); **variance** σ² = Σ (value − μ)² × probability.
+- Greek letters (μ, σ) because they describe the whole distribution/population.
+- Worked "selling cars" example builds the table column by column in R.
+- Don't memorize PMFs — but *do* memorize mean and variance.
 :::
 
 :::{admonition} Binomial Distribution (Pt. 1 — d is for density)
 :class: note dropdown
-- **`dbinom`** gives the probability of an exact number of successes.
-- The binomial counts successes in *n* independent trials.
+- Binomial = successes in *n* independent trials with success probability π.
+- **`dbinom(x, size, prob)`** = probability of **exactly** x successes ("flights late": `dbinom(1, size=5, prob=0.2)`).
 - "d" = density = the bar height.
-- Foundation for the p/q functions next.
+- Sum individual `dbinom` values to cover a set of outcomes.
 :::
 
 :::{admonition} Binomial Distribution (Pt. 2 — p is percentile, q is quantile)
 :class: note dropdown
-- **p** = cumulative (sum from the left); **q** = the value at a given percentile.
-- Use **complements** (1 − P) for "greater than" — not the same as compliments!
-- Double-check `qbinom` answers with `pbinom`.
-- The d/p/q pattern is now in place.
+- **`pbinom(q, size, prob)`** = cumulative (≤ q); for "more than," use the **complement** `1 - pbinom(...)` or `lower.tail = FALSE`.
+- **`qbinom(p, size, prob)`** = the value at a given percentile (inverse of `pbinom`).
+- Check a `qbinom` answer by feeding it back through `pbinom`.
+- Complement ≠ compliment! d/p/q now complete for the binomial.
 :::
 
 :::{admonition} Poisson Distribution (D, P, Q for count data)
 :class: note dropdown
-- Apply d/p/q to the **Poisson** (counts per unit time/area).
-- The trick: **rescale λ** for different units of time or area (golf-balls-in-the-yard example).
-- d = bar value, p = from the left, q = inverse percentile.
-- Same workflow as the binomial.
+- Poisson = counts per unit time/area, parameter λ (mean = variance = λ).
+- **`dpois(x, lambda)`**, **`ppois(q, lambda)`** (+ complement / `lower.tail=FALSE`), **`qpois(p, lambda)`**.
+- **Rescale λ** to the units in the question; check `qpois` with `ppois`.
+- Same d/p/q workflow as the binomial.
 :::
 
 :::{admonition} Wrapping Up
@@ -160,8 +165,8 @@ The t value is a **penalty for small samples** (more uncertainty when you don't 
 :class: note dropdown
 - Set up the environment for continuous distributions.
 - Contrast **mean and variance** for a continuous vs. a discrete distribution.
-- Probability now lives over **ranges**, not single points.
-- Sets up uniform / normal / exponential.
+- Probability now lives over **ranges**, not single points (a point's density is a likelihood, not a probability).
+- The **d / p / q / r** functions carry straight over; sets up uniform / normal / exponential.
 :::
 
 :::{admonition} Uniform Distribution
